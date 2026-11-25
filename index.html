@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tournament Hub</title>
+<style>
+:root{--bg:#080D1B;--panel:#0d1428;--line:#22305a;--text:#ffffff;--muted:#AAB8D2;--green:#3d8bff;--green2:#8B5CF6;--orange:#F5C451;--blue:#1677FF;--purple:#8B5CF6;--gold:#F5C451}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at 70% -10%,#2a1a5e 0,transparent 45%),var(--bg);color:var(--text);font-family:Inter,Segoe UI,Arial,sans-serif}button,input,select{font:inherit}button{cursor:pointer}
+.layout{display:flex;min-height:100vh}.sidebar{width:235px;background:#060a18;border-right:1px solid var(--line);padding:24px 16px;display:flex;flex-direction:column;gap:28px}.brand{display:flex;align-items:center;gap:10px;font-weight:900;font-size:19px}.brand-mark{height:34px;width:34px;border-radius:11px;background:var(--green);color:#ffffff;display:grid;place-items:center}.navlabel{font-size:10px;color:#7f8fb3;letter-spacing:1.5px;font-weight:800;margin:4px 10px 10px}.nav{display:grid;gap:6px}.nav button{border:0;background:transparent;color:#AAB8D2;text-align:left;padding:12px;border-radius:10px;display:flex;gap:11px;align-items:center}.nav button.active,.nav button:hover{background:#1a2250;color:var(--green)}.sidebottom{margin-top:auto;border:1px solid var(--line);border-radius:14px;padding:14px;background:linear-gradient(145deg,#141c3d,#101714)}.sidebottom p{font-size:12px;color:var(--muted);line-height:1.5}.sidebottom button{background:var(--green);color:#ffffff;border:0;border-radius:9px;padding:10px 12px;font-weight:800;width:100%}
+main{flex:1;min-width:0;padding:28px 34px 50px;max-width:1450px;margin:auto}.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:27px;gap:12px}.crumb{font-size:12px;color:var(--muted)}.livepill{border:1px solid #2a3a6e;background:#131b3d;color:var(--green);padding:7px 10px;border-radius:20px;font-size:11px;font-weight:800}h1{font-size:clamp(25px,3vw,34px);margin:0 0 8px}.subtitle{color:var(--muted);margin:0;font-size:14px}.titlebar{display:flex;align-items:center;justify-content:space-between;gap:15px;margin-bottom:24px}.primary{background:var(--green);color:#ffffff;border:0;border-radius:10px;padding:12px 16px;font-weight:850}.primary:hover{background:#3a8cff}.secondary{background:#18204a;border:1px solid #2a3a6e;color:#dbe6ff;border-radius:9px;padding:10px 13px;font-weight:700}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:24px}.stat,.card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:17px}.stathead{color:var(--muted);font-size:12px}.statnum{font-size:27px;font-weight:850;margin:13px 0 6px}.statfoot{font-size:11px;color:#8392b3}.grid{display:grid;grid-template-columns:minmax(0,1.4fr) minmax(280px,.9fr);gap:16px}.card{padding:0;overflow:hidden}.cardhead{padding:18px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:10px}.cardhead h2{font-size:15px;margin:0}.cardbody{padding:17px}.tournamentlist{display:grid;gap:10px}.tourrow{display:flex;align-items:center;justify-content:space-between;border:1px solid #22305a;background:#0a1022;border-radius:11px;padding:12px;gap:10px}.tourrow strong{font-size:12px}.tourrow small{display:block;color:var(--muted);font-size:10px;margin-top:5px}.status{color:var(--green);font-size:10px;font-weight:800}.section{display:none}.section.active{display:block}.empty{color:var(--muted);text-align:center;padding:30px 10px;font-size:13px}.notice{background:#30271a;border:1px solid #70522d;color:#ffe2ad;padding:12px 14px;border-radius:10px;margin-bottom:18px;font-size:13px;line-height:1.5}.modalbg{position:fixed;inset:0;background:#0009;display:none;align-items:center;justify-content:center;padding:16px;z-index:5}.modalbg.show{display:flex}.modal{width:min(500px,100%);background:#111a16;border:1px solid #35463c;border-radius:16px;padding:22px;box-shadow:0 25px 80px #0008;max-height:90vh;overflow:auto}.modalhead{display:flex;justify-content:space-between;align-items:center;margin-bottom:18px}.modalhead h2{margin:0;font-size:18px}.close{background:none;border:0;color:#b6c4bb;font-size:24px}.field{display:grid;gap:7px;margin:13px 0}.field label{font-size:12px;color:#a7b7ad}.field input,.field select{background:#0a1022;color:var(--text);border:1px solid #2a3a6e;border-radius:9px;padding:11px;outline:none;width:100%}.field input:focus,.field select:focus{border-color:var(--green)}.modalactions{display:flex;justify-content:flex-end;gap:9px;margin-top:18px}.toast{position:fixed;bottom:20px;right:20px;background:#23352a;color:var(--green);border:1px solid #3b4f9a;padding:13px 16px;border-radius:10px;display:none;z-index:8;font-size:13px}
+@media(max-width:900px){.sidebar{width:190px}.stats{grid-template-columns:repeat(2,1fr)}.grid{grid-template-columns:1fr}}@media(max-width:650px){.sidebar{width:64px;padding:18px 8px}.brand{justify-content:center}.brand span:last-child,.navlabel,.nav button span:not(.navicon),.sidebottom{display:none}.nav button{justify-content:center;padding:12px}main{padding:18px 14px 40px}.titlebar{align-items:flex-start;flex-direction:column}.titlebar .primary{width:100%}.stats{gap:9px}.stat{padding:13px}.statnum{font-size:23px}.topbar{margin-bottom:20px}}
+
+.match-meta{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-top:6px;color:var(--muted);font-size:11px}
+.actions{display:flex;gap:7px;flex-wrap:wrap;justify-content:flex-end}
+.smallbtn{background:#18204a;border:1px solid #2a3a6e;color:#dbe6ff;border-radius:8px;padding:7px 9px;font-size:11px;font-weight:700}
+.danger{border-color:#744044;color:#ffb6b6}
+.state-upcoming{color:#b8c9ff}.state-ongoing{color:var(--green)}.state-completed{color:#AAB8D2}
+.score{font-size:17px;font-weight:900;color:var(--green)}
+.sharebox{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}.sharebox input{flex:1;min-width:220px;background:#0a1022;color:var(--text);border:1px solid #2a3a6e;border-radius:9px;padding:10px}.public-wrap{max-width:650px;margin:6vh auto;padding:20px}.public-card{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:24px}.public-card h1{margin-bottom:8px}.public-card .field input{padding:13px}.success{background:#141c3d;border:1px solid #3b4f9a;color:#cfe0ff;padding:14px;border-radius:10px;margin-top:14px;display:none}.muted-note{font-size:12px;color:var(--muted);line-height:1.5}
+
+.group-toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.group-wrap{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;margin-bottom:14px}
+.group-table-wrap{overflow-x:auto}
+.group-table{width:100%;border-collapse:collapse;font-size:11px;min-width:650px}
+.group-table th,.group-table td{padding:9px 8px;border-bottom:1px solid #22305a;text-align:left;white-space:nowrap}
+.group-table th{color:#AAB8D2;font-weight:700}
+.group-table tr:first-child td{color:var(--green)}
+.group-stage-label{font-size:10px;color:var(--green);font-weight:800;text-transform:uppercase;letter-spacing:.7px}
+.champion{padding:16px;border:1px solid #3b4f9a;background:#141c3d;border-radius:12px;color:#cfe0ff;margin-bottom:14px}
+@media(max-width:850px){.group-wrap{grid-template-columns:1fr}}
+
+.livegrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:10px}
+.livecard,.champcard{background:#0a1022;border:1px solid #22305a;border-radius:12px;padding:12px}
+.livecard.live{border-color:#3b4f9a;box-shadow:0 0 0 1px #1677ff55}
+.live-meta{font-size:10px;color:var(--muted);margin-bottom:8px;display:flex;justify-content:space-between;gap:6px}
+.live-row{display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;font-size:13px;font-weight:700}
+.live-team.right{text-align:right}.live-score{font-size:20px;font-weight:900;color:var(--green)}
+.champcard{display:flex;gap:12px;align-items:flex-start}.champ-cup{font-size:38px}
+.pyramid{position:relative;padding:22px 8px;margin-bottom:14px;display:grid;gap:10px;justify-items:center}
+.pyramid::before{content:"";position:absolute;inset:0;background:linear-gradient(#F5C45133,#3d8bff08);clip-path:polygon(50% 0,100% 100%,0 100%)}
+.pyr-row{position:relative;display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.pyr-cup{font-size:56px;line-height:1}.pyr-champ{font-size:22px;font-weight:900;color:#ffe27a}.pyr-wait{color:var(--muted);font-size:12px}
+.pyr-box{background:#141c3d;border:1px solid #3b4f9a;border-radius:9px;padding:8px 12px;font-size:12px;text-align:center;min-width:110px}
+.pyr-box small{display:block;font-size:9px;color:var(--green);letter-spacing:1px;margin-bottom:3px}
+.pyr-box.dim{opacity:.55;border-style:dashed}
+.pyr-box.tiny{min-width:78px;font-size:10px;padding:5px 6px}
+.fan-wrap{max-width:1000px;margin:0 auto;padding:24px 16px 60px}
+.org-only{}
+body:not(.is-org) .org-only{display:none!important}
+.avatar{width:44px;height:44px;border-radius:50%;object-fit:cover;background:#141c3d;display:grid;place-items:center;font-weight:900;color:var(--green);flex:none}
+.avatar-lg{width:96px;height:96px;border-radius:50%;object-fit:cover;background:#141c3d;display:grid;place-items:center;font-size:32px;font-weight:900;color:var(--green)}
+.flag{width:20px;height:15px;vertical-align:middle;margin-right:6px;border-radius:2px}
+.chip{display:inline-block;font-size:10px;padding:3px 8px;border:1px solid #22305a;border-radius:20px;margin:4px 4px 0 0;color:var(--muted)}
+.pfgrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:700px){.pfgrid{grid-template-columns:1fr}}
+.checkrow{display:flex;gap:8px;align-items:center;font-size:13px;margin:6px 0}
+.checkrow input{width:auto}
+.dircard{cursor:pointer;display:flex;gap:12px;align-items:center}
+#dirSearch,.field textarea{background:#0a1022;color:var(--text);border:1px solid #2a3a6e;border-radius:9px;padding:11px;outline:none;width:100%;font:inherit}
+#dirSearch:focus,.field textarea:focus{border-color:var(--green)}
+
+/* ===== Esports theme layer ===== */
+body{background:radial-gradient(ellipse at 15% -10%,#1b2f7a66 0,transparent 45%),radial-gradient(ellipse at 90% 0,#8B5CF633 0,transparent 40%),var(--bg)}
+.brand-mark{background:linear-gradient(135deg,#F5C451,#e09b1a);box-shadow:0 0 18px #F5C45155}
+.brand span:last-child{background:linear-gradient(90deg,#fff,#F5C451);-webkit-background-clip:text;background-clip:text;color:transparent}
+.sidebar{background:linear-gradient(180deg,#0a1030,#050816)}
+.nav button{transition:all .2s}
+.nav button.active{background:linear-gradient(90deg,#8B5CF6,#1677FF);color:#fff;box-shadow:0 0 16px #8B5CF655}
+.nav button:hover:not(.active){background:#1a2250;color:#fff}
+.primary{background:linear-gradient(90deg,#1677FF,#8B5CF6);color:#fff;transition:transform .15s,box-shadow .15s}
+.primary:hover{background:linear-gradient(90deg,#3a8cff,#a07bff);transform:translateY(-1px);box-shadow:0 6px 20px #1677ff55}
+.sidebottom button{background:linear-gradient(90deg,#1677FF,#8B5CF6);color:#fff}
+.sidebottom{background:linear-gradient(145deg,#1b1450,#0a1030)}
+.stat,.card,.public-card{border-color:#2a3a8a;box-shadow:0 0 0 1px #1677ff12,0 8px 24px #0006;transition:transform .2s,box-shadow .2s,border-color .2s}
+.stat:hover,.card:hover{border-color:#5b6cff;box-shadow:0 0 22px #1677ff33}
+.livepill{background:#131b3d;color:#7fb2ff}
+.champion,.champcard .champ-cup,.pyr-champ{color:#F5C451}
+.champion{border-color:#F5C45166;background:linear-gradient(135deg,#2a2210,#141c3d)}
+.score,.live-score{color:#F5C451}
+.group-table tr:first-child td,.group-stage-label,.pyr-box small{color:#F5C451}
+:focus-visible{outline:2px solid #F5C451;outline-offset:2px}
+.hero{position:relative;overflow:hidden;border:1px solid #3b4f9a;border-radius:18px;padding:34px 30px;margin-bottom:24px;background:linear-gradient(120deg,#0d1a5c 0%,#3b1a8a 55%,#0d1428 100%);box-shadow:0 0 40px #1677ff33}
+.hero::after{content:"🏆";position:absolute;right:28px;top:50%;transform:translateY(-50%);font-size:110px;opacity:.9;filter:drop-shadow(0 0 25px #F5C451aa)}
+.hero h2{margin:0;font-size:clamp(28px,5vw,46px);font-weight:900;letter-spacing:1px;font-style:italic;background:linear-gradient(90deg,#fff,#F5C451);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{margin:6px 0 18px;color:#dbe6ff;font-weight:700;letter-spacing:1px;font-size:13px}
+.hero .heroBtns{display:flex;gap:10px;flex-wrap:wrap;position:relative;z-index:1}
+.hero .gold{background:linear-gradient(90deg,#F5C451,#e09b1a);color:#1a1200}
+@media(max-width:650px){.hero::after{font-size:60px;right:12px;top:18px;transform:none}.hero{padding:24px 18px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script></head><body>
+<div class="layout"><aside class="sidebar"><div class="brand"><div class="brand-mark">🏆</div><span>TOURNAMENT HUB</span></div><div><div class="navlabel">MENU</div><nav class="nav"><button class="active" data-view="dashboard"><span class="navicon">▦</span><span>Dashboard</span></button><button data-view="tournaments"><span class="navicon">🏆</span><span>Tournaments</span></button><button data-view="matches"><span class="navicon">⚽</span><span>Matches</span></button><button data-view="live"><span class="navicon">📡</span><span>Live scores</span></button><button data-view="history"><span class="navicon">🏅</span><span>Champion history</span></button><button data-view="community"><span class="navicon">👥</span><span>Community</span></button><button data-view="profile"><span class="navicon">👤</span><span>My profile</span></button><button data-view="help"><span class="navicon">💬</span><span>Help</span></button><button data-view="admin" id="navAdmin" style="display:none"><span class="navicon">🛡</span><span>Admin</span></button><button class="org-only" data-view="registrations"><span class="navicon">📝</span><span>Registrations</span></button><button class="org-only" data-view="settings"><span class="navicon">⚙</span><span>Player registration</span></button></nav></div><div class="sidebottom org-only"><strong>Create a competition</strong><p>Set up a tournament and invite players.</p><button onclick="openCreate()">＋ Create tournament</button></div></aside>
+<main><div class="topbar"><div class="crumb">Tournament Hub / Overview</div><div class="actions"><span class="livepill" id="connectionPill">● SUPABASE CONNECTING</span><button class="secondary" id="bellButton" onclick="openNotifications()">🔔 <span id="bellCount"></span></button><button class="secondary" id="playerButton" onclick="playerButtonClick()">Player sign in</button><button class="secondary" id="authButton" onclick="openAuth()">Organizer sign in</button></div></div>
+<div class="notice"><strong>Supabase:</strong> Tournament data is shared online. Organizer changes require signing in. Public players can register through each tournament’s share link.</div>
+<section class="section active" id="dashboard"><div class="hero"><h2>TOURNAMENT HUB</h2><p>WHERE CHAMPIONS ARE MADE.</p><div class="heroBtns"><button class="primary gold" onclick="showView('tournaments')">Explore Tournaments</button><button class="primary" onclick="showView('live')">Watch Live Matches</button></div></div><div class="titlebar"><div><h1>Dashboard</h1><p class="subtitle">Your tournament setup at a glance.</p></div><button class="primary org-only" onclick="openCreate()">＋ Create tournament</button></div><div class="stats"><div class="stat"><div class="stathead">TOURNAMENTS CREATED</div><div class="statnum" id="statT">0</div><div class="statfoot">Shared tournaments in Supabase</div></div><div class="stat"><div class="stathead">TOURNAMENT REGISTRATIONS</div><div class="statnum" id="statR">0</div><div class="statfoot">Entries loaded from Supabase</div></div><div class="stat"><div class="stathead">REGISTRATION LINK</div><div class="statnum" id="statLink">Not set</div><div class="statfoot">Shared form link configuration</div></div></div><div class="grid"><div class="card"><div class="cardhead"><h2>Your tournaments</h2><span id="tourCount">0 total</span></div><div class="cardbody"><div id="tourList" class="tournamentlist"></div></div></div><div class="card org-only"><div class="cardhead"><h2>Quick setup</h2></div><div class="cardbody"><p class="subtitle">Create a separate shareable registration link for each tournament. Player entries are stored in Supabase.</p><button class="secondary" onclick="showView('settings')">Open player registration</button></div></div></div></section>
+<section class="section" id="tournaments"><div class="titlebar section-title"><div><h1>Tournaments</h1><p class="subtitle">Create and manage tournaments stored in Supabase.</p></div><button class="primary org-only" onclick="openCreate()">＋ Create tournament</button></div><div class="card"><div class="cardhead"><h2>All tournaments</h2></div><div class="cardbody"><div id="allTourList" class="tournamentlist"></div></div></div></section>
+<section class="section" id="matches"><div class="titlebar section-title"><div><h1>Matches</h1><p class="subtitle">Create fixtures and update live scores and match status.</p></div><button class="primary org-only" onclick="openMatch()">＋ Add match</button></div><div class="stats"><div class="stat"><div class="stathead">ONGOING MATCHES</div><div class="statnum" id="ongoingCount">0</div><div class="statfoot">Currently in progress</div></div><div class="stat"><div class="stathead">UPCOMING MATCHES</div><div class="statnum" id="upcomingCount">0</div><div class="statfoot">Not started yet</div></div><div class="stat"><div class="stathead">COMPLETED MATCHES</div><div class="statnum" id="completedCount">0</div><div class="statfoot">Finished matches</div></div></div><div class="card" style="margin-bottom:16px"><div class="cardhead"><h2>Groups &amp; knockout</h2><span class="muted-note">8 or 16 players</span></div><div class="cardbody"><div id="groupSystem"><div class="empty">Group standings and knockout progression will appear here.</div></div></div></div><div class="card"><div class="cardhead"><h2>All matches</h2><span id="matchCount">0 total</span></div><div class="cardbody"><div id="matchList" class="tournamentlist"></div></div></div></section>
+<section class="section" id="registrations"><div class="titlebar section-title"><div><h1>Player registrations</h1><p class="subtitle">Player entries stored in Supabase, grouped by tournament.</p></div><button class="secondary" onclick="loadSharedRegistrations()">Refresh entries</button></div><div class="card"><div class="cardhead"><h2>Registrations</h2><span id="regCount">0</span></div><div class="cardbody"><div id="registrationList" class="tournamentlist"></div></div></div></section>
+<section class="section" id="live"><div class="titlebar section-title"><div><h1>Live scores</h1><p class="subtitle">Ongoing, upcoming and completed matches. Updates by itself every 15 seconds.</p></div><div class="actions"><button class="secondary" onclick="shareFan()">Share</button><button class="primary" onclick="copyFanLink()">Copy fan page link</button></div></div><div id="liveView"></div></section>
+<section class="section" id="history"><div class="titlebar section-title"><div><h1>Champion history</h1><p class="subtitle">Every tournament champion is saved here automatically.</p></div></div><div class="card"><div class="cardbody" id="historyView"></div></div></section>
+<section class="section" id="community"><div class="titlebar section-title"><div><h1>Community</h1><p class="subtitle">Find players. Only the information players chose to share is shown.</p></div></div><div class="card"><div class="cardbody"><input id="dirSearch" placeholder="Search by name, username, country or game" oninput="renderDirectory()"><div id="dirList" class="livegrid" style="margin-top:12px"></div></div></div></section>
+<section class="section" id="profile"><div class="titlebar section-title"><div><h1>My profile</h1><p class="subtitle">Your permanent player profile. You choose what is public.</p></div></div><div id="profileBox"></div><div id="mfaBox" style="margin-top:14px"></div></section>
+<section class="section" id="help"><div class="titlebar section-title"><div><h1>Help &amp; support</h1><p class="subtitle">Answers to common questions, and a way to contact us.</p></div></div>
+<div class="card" style="margin-bottom:14px"><div class="cardhead"><h2>Frequently asked questions</h2></div><div class="cardbody" id="faqList"></div></div>
+<div class="card" style="margin-bottom:14px"><div class="cardhead"><h2>Contact us</h2></div><div class="cardbody"><form id="supportForm"><div class="pfgrid"><div class="field"><label>Your name</label><input id="spName" maxlength="60"></div><div class="field"><label>Email (so we can reply)</label><input id="spEmail" type="email" maxlength="120"></div></div><div class="field"><label>Type</label><select id="spCategory"><option value="question">Question</option><option value="problem">Technical problem</option><option value="feedback">Feedback</option><option value="report">Report unfair play</option></select></div><div class="field"><label>Message</label><textarea id="spMessage" rows="4" maxlength="2000" required></textarea></div><div class="modalactions"><button class="primary" type="submit">Send message</button></div></form></div></div>
+<div class="card"><div class="cardhead"><h2>My requests</h2></div><div class="cardbody" id="mySupport"><div class="empty">Sign in to see your requests and our replies.</div></div></div></section>
+<section class="section" id="admin"><div class="titlebar section-title"><div><h1>Administrator panel</h1><p class="subtitle">Accounts, support requests, maintenance mode and the activity log.</p></div></div><div id="adminBox"></div></section>
+<section class="section" id="settings"><div class="titlebar section-title"><div><h1>Registration settings</h1><p class="subtitle">Optional: connect Google Sheets separately. Supabase is the primary tournament database.</p></div></div><div class="card"><div class="cardhead"><h2>Additional Google Sheets connection</h2></div><div class="cardbody"><p class="subtitle">Paste the Web App URL you receive after deploying the Google Apps Script. Save it once; it will be included in each player's share link.</p><div class="field"><label>Google Apps Script Web App URL</label><input id="apiUrl" type="url" placeholder="https://script.google.com/macros/s/.../exec"></div><div class="actions"><button class="primary" onclick="saveApiUrl()">Save connection</button><button class="secondary" onclick="testApiConnection()">Test connection</button></div><p id="apiStatus" class="muted-note" style="margin-top:12px">Not connected yet.</p><div class="notice" style="margin-top:18px">You will create a Google Sheet, add the Apps Script code supplied with this website, then deploy it as a Web App accessible to anyone. Keep the Sheet owner account secure. Do not use this for collecting payments.</div></div></div></section>
+</main></div>
+<section id="publicRegister" style="display:none"><div class="public-wrap"><div class="public-card"><div class="brand" style="margin-bottom:22px"><div class="brand-mark">🏆</div><span>TOURNAMENT HUB</span></div><p class="status">PLAYER REGISTRATION</p><h1 id="publicTournamentName">Tournament registration</h1><p class="subtitle" id="publicTournamentMeta"></p><form id="publicRegForm"><div class="field"><label>Full name</label><input id="publicName" required maxlength="80" autocomplete="name"></div><div class="field"><label>Gamer tag / Username</label><input id="publicTag" required maxlength="60"></div><div class="field"><label>WhatsApp / Contact number (optional)</label><input id="publicPhone" maxlength="30" autocomplete="tel"></div><button class="primary" type="submit" style="width:100%;margin-top:10px">Submit registration</button></form><div id="publicMessage" class="success"></div><p class="muted-note" style="margin-top:16px">Your registration will be sent to the tournament organizer. Do not submit passwords or payment-card details.</p></div></div></section>
+<div class="modalbg" id="createBg"><div class="modal"><div class="modalhead"><h2 id="createTitle">Create tournament</h2><button class="close" onclick="closeCreate()">×</button></div><form id="createForm"><div class="field"><label>Tournament name</label><input id="tName" required maxlength="80" placeholder="e.g. Friday Night Cup"></div><div class="field"><label>Game / Sport</label><select id="tGame"><option>EA FC / FIFA</option><option>Real-life Football</option><option>Basketball</option><option>Call of Duty</option><option>eFootball</option><option>Other</option></select></div><div class="field"><label>Format</label><select id="tFormat"><option>Knockout</option><option>League</option><option>Groups + Knockout</option></select></div><div class="field"><label>Number of slots</label><select id="tSlots"><option>4</option><option selected>8</option><option>16</option><option>32</option><option>64</option></select></div><div class="modalactions"><button class="secondary" type="button" onclick="closeCreate()">Cancel</button><button class="primary" id="saveTournamentBtn" type="submit">Create tournament</button></div></form></div></div>
+<div class="modalbg" id="regBg"><div class="modal"><div class="modalhead"><h2>Local test registration</h2><button class="close" onclick="closeReg()">×</button></div><form id="regForm"><div class="field"><label>Tournament</label><select id="regTournament" required></select></div><div class="field"><label>Player name</label><input id="regName" required maxlength="80"></div><div class="field"><label>Gamer tag</label><input id="regTag" required maxlength="60"></div><div class="modalactions"><button class="secondary" type="button" onclick="closeReg()">Cancel</button><button class="primary" type="submit">Save local test entry</button></div></form><p class="subtitle" style="margin-top:12px">This test entry is not sent to the organizer or shared online. For public registration use the configured shared form link.</p></div></div><div class="modalbg" id="matchBg"><div class="modal"><div class="modalhead"><h2 id="matchTitle">Add match</h2><button class="close" onclick="closeMatch()">×</button></div><form id="matchForm"><div class="field"><label>Tournament</label><select id="mTournament" required></select></div><div class="field"><label>Home player / team</label><input id="mHome" required maxlength="80" placeholder="Player or team 1"></div><div class="field"><label>Away player / team</label><input id="mAway" required maxlength="80" placeholder="Player or team 2"></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div class="field"><label>Home score</label><input id="mHomeScore" type="number" min="0" max="99" value="0" required></div><div class="field"><label>Away score</label><input id="mAwayScore" type="number" min="0" max="99" value="0" required></div></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px"><div class="field"><label>Home penalties (optional)</label><input id="mHomePen" type="number" min="0" max="99"></div><div class="field"><label>Away penalties (optional)</label><input id="mAwayPen" type="number" min="0" max="99"></div></div><p class="muted-note" style="margin:-4px 0 10px">Use penalties only for a knockout match that ended level.</p><div class="field"><label>Walkover (opponent did not show up)</label><div class="actions"><button type="button" class="smallbtn" onclick="setWalkover('home')">Home wins 3-0</button><button type="button" class="smallbtn" onclick="setWalkover('away')">Away wins 3-0</button><button type="button" class="smallbtn" onclick="setWalkover(null)">Clear</button></div></div><div class="field"><label>Match status</label><select id="mStatus"><option>Upcoming</option><option>Ongoing</option><option>Completed</option></select></div><div class="modalactions"><button class="secondary" type="button" onclick="closeMatch()">Cancel</button><button class="primary" type="submit">Save match</button></div></form></div></div><div class="modalbg" id="authBg"><div class="modal"><div class="modalhead"><h2>Organizer sign in</h2><button class="close" onclick="closeAuth()">×</button></div><form id="authForm"><div class="field"><label>Organizer email</label><input id="authEmail" type="email" required autocomplete="username"></div><div class="field"><label>Password</label><input id="authPassword" type="password" required autocomplete="current-password"></div><div id="orgCaptcha" style="margin:8px 0"></div><div class="modalactions"><button class="secondary" type="button" onclick="closeAuth()">Cancel</button><button class="primary" type="submit" id="authSubmit">Sign in</button></div></form><p class="muted-note">Organizer accounts are created in Supabase Authentication by the project owner. Public visitors do not need an account to register.</p></div></div><section id="fanPage" style="display:none"><div class="fan-wrap"><div class="brand" style="margin-bottom:18px"><div class="brand-mark">🏆</div><span>TOURNAMENT HUB</span></div><h1>Live scores &amp; fixtures</h1><p class="subtitle" style="margin-bottom:20px">Updates by itself every 15 seconds. <span id="lastUpdated"></span></p><button class="primary" style="margin-bottom:16px" onclick="shareFan()">Share this page</button><div id="fanContent"></div></div></section>
+<div class="modalbg" id="awardBg"><div class="modal" style="width:min(560px,100%)"><div class="modalhead"><h2>Champion award</h2><button class="close" onclick="closeAward()">×</button></div><canvas id="awardCanvas" width="1080" height="1350" style="width:100%;border-radius:12px"></canvas><div class="modalactions"><button class="secondary" onclick="closeAward()">Close</button><button class="secondary" onclick="shareAward()">Share image</button><button class="primary" onclick="downloadAward()">Download image</button></div></div></div>
+<div class="modalbg" id="playerAuthBg"><div class="modal"><div class="modalhead"><h2 id="paTitle">Player sign in</h2><button class="close" onclick="closePlayerAuth()">×</button></div><form id="playerAuthForm"><div id="paSignupFields" style="display:none"><div class="field"><label>Username (letters, numbers, _)</label><input id="paUsername" maxlength="20" pattern="[A-Za-z0-9_]{3,20}"></div><div class="field"><label>Display name</label><input id="paDisplay" maxlength="40"></div></div><div class="field"><label>Email</label><input id="paEmail" type="email" required autocomplete="username"></div><div class="field"><label>Password</label><input id="paPassword" type="password" minlength="6" required autocomplete="current-password"></div><div id="paCaptcha" style="margin:8px 0"></div><div class="modalactions"><button class="secondary" type="button" id="paToggle" onclick="togglePlayerMode()">Create an account instead</button><button class="primary" type="submit" id="paSubmit">Sign in</button></div></form><p class="muted-note">One account works for every tournament and game. Your email is never shown to other players.</p></div></div>
+<div class="modalbg" id="profileViewBg"><div class="modal"><div class="modalhead"><h2>Player profile</h2><button class="close" onclick="$('profileViewBg').classList.remove('show')">×</button></div><div id="profileViewBody"></div></div></div>
+<div id="maintenanceOverlay" style="display:none;position:fixed;inset:0;z-index:4;background:#080D1B;align-items:center;justify-content:center;flex-direction:column;text-align:center;padding:24px"><div style="font-size:56px">🛠</div><h1>Under maintenance</h1><p class="subtitle" id="maintMsg" style="max-width:480px"></p><button class="secondary" id="maintAdminBtn" style="margin-top:16px;display:none" onclick="openAuth()">Administrator sign in</button></div>
+<div class="modalbg" id="mfaBg"><div class="modal"><div class="modalhead"><h2>Two-step verification</h2></div><p class="muted-note">Open your authenticator app and enter the 6-digit code for Tournament Hub.</p><div class="field"><input id="mfaCode" inputmode="numeric" maxlength="6" autocomplete="one-time-code" placeholder="123456" onkeydown="if(event.key==='Enter')submitMfa()"></div><div class="modalactions"><button class="secondary" type="button" onclick="cancelMfa()">Cancel</button><button class="primary" type="button" onclick="submitMfa()">Verify</button></div></div></div>
+<div class="modalbg" id="notifBg"><div class="modal" style="width:min(560px,100%)"><div class="modalhead"><h2>Announcements</h2><button class="close" onclick="$('notifBg').classList.remove('show')">×</button></div><div id="notifBody"></div></div></div>
+<div class="toast" id="toast"></div>
+<script>
+const $ = id => document.getElementById(id);
+const STORAGE_API='tournamentHubAppsScriptUrlV1';
+const SUPABASE_URL = "https://exhytjmeszyrbzfdcuyh.supabase.co";
+const SUPABASE_KEY = "sb_publishable_IAodWsfUxvVWVzT8xPAjEw__oXh6H5x";
+const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let tournaments=[], registrations=[], matches=[], groupAssignments=[], championRecords=[], awardInfo=null;
+let editTournamentId=null, editMatchId=null, currentUser=null, playerUser=null, myProfile=null, avatarFile=null, profileDirty=false, directory=[], paMode='in', appSettings={}, notifications=[], supportMine=[], walkoverNote=null;
+let apiUrl=localStorage.getItem(STORAGE_API)||'';
+
+function escapeHtml(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function toast(msg){const el=$('toast');el.textContent=msg;el.style.display='block';setTimeout(()=>el.style.display='none',3200);}
+function requireOrganizer(){if(!currentUser){toast('Please sign in as the organizer first.');openAuth();return false;}return true;}
+function isPublicPage(){return Boolean(new URLSearchParams(location.search).get('register'));}
+function mapTournament(row){return {id:row.id,name:row.name,game:row.game,format:row.format,slots:row.slots,entryFee:row.entry_fee??0,isPublished:row.is_published!==false,registrationOpen:row.registration_open!==false,createdAt:row.created_at};}
+function mapRegistration(row){return {id:row.id,tournamentId:row.tournament_id,name:row.player_name,tag:row.gamer_tag,phone:row.contact_number||'',createdAt:row.created_at,checkedIn:!!row.checked_in,noShow:!!row.no_show};}
+function mapMatch(row){return {id:row.id,tournamentId:row.tournament_id,home:row.home_player,away:row.away_player,homeScore:row.home_score??0,awayScore:row.away_score??0,status:row.match_status||'Upcoming',scheduledAt:row.scheduled_at,stage:row.stage||'manual',groupName:row.group_name||null,homeRegistrationId:row.home_registration_id||null,awayRegistrationId:row.away_registration_id||null,homePenalties:row.home_penalties??null,awayPenalties:row.away_penalties??null,resultNote:row.result_note||null};}
+function updateAuthUI(){
+  $('authButton').textContent=currentUser?'Sign out':'Organizer sign in';
+  $('playerButton').textContent=playerUser?'Sign out':(currentUser?'My profile':'Player sign in');
+  document.body.classList.toggle('is-org',!!currentUser);
+  $('navAdmin').style.display=isAdmin()?'':'none';$('authButton').style.display=(currentUser||ADMIN_LINK)?'':'none';applyMaintenance();
+  $('connectionPill').textContent=currentUser?'● SUPABASE · ORGANIZER SIGNED IN':playerUser?'● SIGNED IN AS PLAYER':'● SUPABASE · PUBLIC VIEW';
+}
+async function applySession(user){
+  if(user&&!(await mfaGate())){await supabaseClient.auth.signOut();user=null;}
+  currentUser=null;playerUser=null;myProfile=null;
+  if(user){
+    let role='organizer';
+    try{
+      const {data,error}=await supabaseClient.from('profiles').select('*').eq('id',user.id).maybeSingle();
+      if(error)throw error;
+      if(data){myProfile=data;role=data.role;}else role='player';
+      if(data&&data.suspended){currentUser=null;playerUser=null;myProfile=null;supabaseClient.auth.signOut();toast('This account has been suspended. Please contact support.');updateAuthUI();renderProfileForm();return;}
+    }catch(e){console.warn('Profiles unavailable, using organizer mode:',e);}
+    if(role==='organizer'||role==='admin')currentUser=user;else playerUser=user;
+  }
+  updateAuthUI();renderProfileForm();
+}
+async function loadData(silent){
+  if(!silent)$('connectionPill').textContent='● LOADING SUPABASE';
+  const {data:tData,error:tError}=await supabaseClient.from('tournaments').select('*').order('created_at',{ascending:false});
+  if(tError) throw tError;
+  tournaments=(tData||[]).map(mapTournament);
+  const {data:mData,error:mError}=await supabaseClient.from('matches').select('*').order('created_at',{ascending:false});
+  if(mError) throw mError;
+  matches=(mData||[]).map(mapMatch);
+  try{
+    const {data:gData,error:gError}=await supabaseClient.from('tournament_group_players').select('*');
+    if(gError)throw gError;
+    groupAssignments=gData||[];
+  }catch(groupError){
+    groupAssignments=[];
+    console.warn('Groups migration is not installed or group data is unavailable:',groupError);
+  }
+  try{
+    const {data:cData,error:cError}=await supabaseClient.from('tournament_champions').select('*').order('won_at',{ascending:false});
+    if(cError)throw cError;championRecords=cData||[];
+  }catch(champError){championRecords=[];console.warn('Champion history unavailable:',champError);}
+  await loadNotifications();await loadSettings();
+  if(currentUser){
+    const {data:rData,error:rError}=await supabaseClient.from('registrations').select('*').order('created_at',{ascending:false});
+    if(rError) throw rError;
+    registrations=(rData||[]).map(mapRegistration);
+  }else{
+    registrations=[];
+  }
+  render();
+  updateAuthUI();
+  await syncKnockoutForAll();
+  renderGroupSystem();renderLive();
+}
+function render(){
+  const rows=tournaments.map(t=>{
+    const n=registrations.filter(r=>r.tournamentId===t.id).length;
+    const full=n>=Number(t.slots);
+    const status=!t.isPublished?'DRAFT':!t.registrationOpen?'CLOSED':full?'FULL':'OPEN';
+    const actions=currentUser
+      ? `<button class="smallbtn" onclick="openEdit('${t.id}')">Edit</button><button class="smallbtn danger" onclick="deleteTournament('${t.id}')">Delete</button><button class="smallbtn" onclick="copyRegistrationLink('${t.id}')">Copy player link</button><button class="smallbtn" onclick="shareRegistration('${t.id}')">Share</button>`
+      : `<button class="smallbtn" onclick="copyRegistrationLink('${t.id}')">Copy player link</button><button class="smallbtn" onclick="shareRegistration('${t.id}')">Share</button>`;
+    return `<div class="tourrow"><div><strong>${escapeHtml(t.name)}</strong><small>${escapeHtml(t.game)} · ${escapeHtml(t.format)} · ${n}/${t.slots} registrations</small></div><div class="actions"><span class="status">${status}</span>${actions}</div></div>`;
+  }).join('');
+  const empty='<div class="empty">No tournaments are available yet. Sign in as organizer to create one.</div>';
+  $('tourList').innerHTML=rows||empty;
+  $('allTourList').innerHTML=rows||empty;
+  $('tourCount').textContent=tournaments.length+' total';
+  $('statT').textContent=tournaments.length;
+  $('statR').textContent=registrations.length;
+  $('statLink').textContent='Per tournament';
+  $('statT').nextElementSibling.textContent='Shared tournaments in Supabase';
+  renderRegs();renderMatches();renderGroupSystem();populateSelect();
+}
+function renderRegs(){
+  const box=$('registrationList');
+  $('regCount').textContent=registrations.length+' registrations';
+  if(!currentUser){box.innerHTML='<div class="empty">Sign in as organizer to view player registrations.</div>';return;}
+  if(!registrations.length){box.innerHTML='<div class="empty">No registrations found for your tournaments yet.</div>';return;}
+  box.innerHTML=tournaments.map(t=>{
+    const list=registrations.filter(r=>r.tournamentId===t.id);
+    if(!list.length)return '';
+    return `<div class="card" style="margin-bottom:12px"><div class="cardhead"><h2>${escapeHtml(t.name)}</h2><span>${list.length}/${t.slots}</span></div><div class="cardbody tournamentlist">${list.map(r=>`<div class="tourrow"><div><strong>${escapeHtml(r.name)} — ${escapeHtml(r.tag)}</strong><small>${escapeHtml(r.phone||'No contact number')} · ${r.createdAt?new Date(r.createdAt).toLocaleString():''}</small></div><div class="actions"><span class="status">${r.noShow?'NO-SHOW':r.checkedIn?'CHECKED IN':'REGISTERED'}</span><button class="smallbtn" onclick="setRegFlag(\'${r.id}\',\'checkedIn\',${!r.checkedIn})">${r.checkedIn?'Undo check-in':'Check in'}</button><button class="smallbtn" onclick="setRegFlag(\'${r.id}\',\'noShow\',${!r.noShow})">${r.noShow?'Undo no-show':'No-show'}</button><button class="smallbtn danger" onclick="removePlayer(\'${r.id}\')">Remove player</button></div></div>`).join('')}</div></div>`;
+  }).join('')||'<div class="empty">No registrations found for your tournaments yet.</div>';
+}
+function populateSelect(){
+  const options=tournaments.map(t=>`<option value="${t.id}">${escapeHtml(t.name)} (${registrations.filter(r=>r.tournamentId===t.id).length}/${t.slots})</option>`).join('');
+  $('regTournament').innerHTML=options;
+  $('mTournament').innerHTML=options;
+}
+function renderMatches(){
+  const list=$('matchList'),counts={Upcoming:0,Ongoing:0,Completed:0};
+  matches.forEach(m=>counts[m.status]=(counts[m.status]||0)+1);
+  $('ongoingCount').textContent=counts.Ongoing||0;$('upcomingCount').textContent=counts.Upcoming||0;$('completedCount').textContent=counts.Completed||0;$('matchCount').textContent=matches.length+' total';
+  if(!matches.length){list.innerHTML='<div class="empty">No matches yet. Sign in and add a match to start tracking fixtures and scores.</div>';return;}
+  list.innerHTML=matches.map(m=>{
+    const t=tournaments.find(x=>x.id===m.tournamentId);
+    const cls=m.status==='Ongoing'?'state-ongoing':m.status==='Completed'?'state-completed':'state-upcoming';
+    const actions=currentUser?`<div class="actions"><button class="smallbtn" onclick="openMatch('${m.id}')">Edit score/status</button><button class="smallbtn danger" onclick="deleteMatch('${m.id}')">Delete</button></div>`:'';
+    return `<div class="tourrow"><div><strong>${escapeHtml(m.home)} <span class="score">${scoreText(m)}</span> ${escapeHtml(m.away)}</strong><div class="match-meta"><span>${escapeHtml(t?t.name:'Tournament')}</span><span>•</span><span class="group-stage-label">${escapeHtml(m.stage||'manual')}${m.groupName?' · Group '+escapeHtml(m.groupName):''}</span><span>•</span><span class="${cls}">${escapeHtml(m.status)}</span></div></div>${actions}</div>`;
+  }).join('');
+}
+
+function getGroupStandings(tournamentId,groupName){
+  const players=groupAssignments.filter(p=>p.tournament_id===tournamentId&&p.group_name===groupName).map(p=>({
+    id:p.registration_id,name:p.player_name,tag:p.gamer_tag||p.player_name,played:0,wins:0,draws:0,losses:0,gf:0,ga:0,gd:0,points:0
+  }));
+  const byId=new Map(players.map(p=>[p.id,p]));
+  matches.filter(m=>m.tournamentId===tournamentId&&m.stage==='group'&&m.groupName===groupName&&m.status==='Completed').forEach(m=>{
+    const h=byId.get(m.homeRegistrationId),a=byId.get(m.awayRegistrationId);
+    if(!h||!a)return;
+    const hs=Number(m.homeScore)||0,as=Number(m.awayScore)||0;
+    h.played++;a.played++;h.gf+=hs;h.ga+=as;a.gf+=as;a.ga+=hs;
+    if(hs>as){h.wins++;a.losses++;h.points+=3;}
+    else if(hs<as){a.wins++;h.losses++;a.points+=3;}
+    else{h.draws++;a.draws++;h.points++;a.points++;}
+  });
+  players.forEach(p=>p.gd=p.gf-p.ga);
+  return players.sort((a,b)=>b.points-a.points||b.gd-a.gd||b.gf-a.gf||a.tag.localeCompare(b.tag));
+}
+function renderGroupSystem(){
+  const root=$('groupSystem');if(!root)return;
+  const eligible=tournaments.filter(isGK);
+  if(!eligible.length){root.innerHTML='<div class="empty">Create an 8 or 16-player tournament using “Groups + Knockout” to use this feature.</div>';return;}
+  root.innerHTML=eligible.map(t=>{
+    const assigned=groupAssignments.filter(p=>p.tournament_id===t.id);
+    if(!assigned.length){
+      const count=registrations.filter(r=>r.tournamentId===t.id).length;
+      return `<div class="tourrow"><div><strong>${escapeHtml(t.name)}</strong><small>${count}/${t.slots} registered · Groups not generated</small></div><button class="primary" onclick="generateGroups('${t.id}')">Generate Groups</button></div>`;
+    }
+    const groupHtml=groupNames(t).map(g=>{
+      const standings=getGroupStandings(t.id,g);
+      return `<div class="card"><div class="cardhead"><h2>Group ${g}</h2><span>${standings.length} players</span></div><div class="group-table-wrap"><table class="group-table"><thead><tr><th>Pos</th><th>Player</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>GD</th><th>Pts</th></tr></thead><tbody>${standings.map((p,i)=>`<tr><td>${i+1}</td><td>${escapeHtml(p.name)} <small>(${escapeHtml(p.tag)})</small></td><td>${p.played}</td><td>${p.wins}</td><td>${p.draws}</td><td>${p.losses}</td><td>${p.gf}</td><td>${p.ga}</td><td>${p.gd}</td><td><strong>${p.points}</strong></td></tr>`).join('')}</tbody></table></div></div>`;
+    }).join('');
+    const tm=matches.filter(m=>m.tournamentId===t.id);
+    const groupMatches=tm.filter(m=>m.stage==='group');
+    const ko=tm.filter(m=>m.stage in KO_RANK).sort((x,y)=>KO_RANK[x.stage]-KO_RANK[y.stage]);
+    const chm=getChampion(t.id);const champion=chm?chm.name:null;
+    const knockout=ko.map(m=>`<div class="tourrow"><div><span class="group-stage-label">${escapeHtml(stageLabel(m.stage))}</span><br><strong>${escapeHtml(m.home)} ${scoreText(m)} ${escapeHtml(m.away)}</strong><small>${escapeHtml(m.status)}</small></div></div>`).join('');
+    const koDraw=ko.some(m=>m.status==='Completed'&&Number(m.homeScore)===Number(m.awayScore)&&!matchWinnerSide(m));
+    const drawNote=koDraw?'<div class="notice">A knockout match ended in a draw. Knockout matches need a winner. Edit the match and enter the penalty scores (or change the score) to continue.</div>':'';
+    return `<div style="margin-bottom:18px"><div class="tourrow" style="margin-bottom:10px"><div><strong>${escapeHtml(t.name)}</strong><small>${groupMatches.filter(m=>m.status==='Completed').length}/${groupNames(t).length*6} group matches completed</small></div><span class="status">GROUPS GENERATED</span></div><div class="group-wrap">${groupHtml}</div><p class="muted-note">Standings: points, goal difference, goals scored, then alphabetical gamer tag. Matches are counted only when marked Completed.</p>${champion?`<div class="champion"><strong>🏆 Tournament champion: ${escapeHtml(champion)}</strong> <button class="smallbtn" style="margin-left:10px" onclick="openAward('${t.id}')">Award image</button></div>`:''}${drawNote}${pyramidHtml(t)}<div class="tournamentlist">${knockout||'<div class="empty">The knockout stage will be created automatically after all group matches are completed.</div>'}</div></div>`;
+  }).join('');
+}
+async function generateGroups(tournamentId){
+  if(!requireOrganizer())return;
+  if(!confirm('Generate the groups and all round-robin fixtures for this tournament? This cannot be undone.'))return;
+  try{
+    const {data,error}=await supabaseClient.rpc('generate_tournament_groups',{p_tournament_id:tournamentId});
+    if(error)throw error;
+    await loadData();
+    toast('Groups and fixtures generated successfully.');
+  }catch(err){console.error('Group generation failed:',err);toast('Could not generate groups: '+err.message);}
+}
+async function insertProgressionMatch(tournamentId,stage,home,away){
+  if(!home||!away)return false;
+  const exists=matches.some(m=>m.tournamentId===tournamentId&&m.stage===stage&&((m.homeRegistrationId===home.id&&m.awayRegistrationId===away.id)||(m.homeRegistrationId===away.id&&m.awayRegistrationId===home.id)));
+  if(exists)return false;
+  const payload={tournament_id:tournamentId,home_player:home.name,away_player:away.name,home_score:0,away_score:0,match_status:'Upcoming',stage,home_registration_id:home.id,away_registration_id:away.id};
+  const {data,error}=await supabaseClient.from('matches').insert(payload).select().single();
+  if(error){if(error.code==='23505')return false;throw error;}
+  matches.push(mapMatch(data));return true;
+}
+let knockoutSyncRunning=false;
+async function syncKnockoutForAll(){
+  if(!currentUser||!groupAssignments.length||knockoutSyncRunning)return;
+  knockoutSyncRunning=true;
+  try{await syncKnockoutInner();}finally{knockoutSyncRunning=false;}
+}
+function matchWinnerSide(m){
+  if(!m||m.status!=='Completed')return null;
+  const h=Number(m.homeScore),a=Number(m.awayScore);
+  if(h!==a)return h>a?'home':'away';
+  if(m.stage==='group'||m.stage==='manual')return null;
+  const hp=m.homePenalties,ap=m.awayPenalties;
+  if(hp==null||ap==null||Number(hp)===Number(ap))return null;
+  return Number(hp)>Number(ap)?'home':'away';
+}
+function scoreText(m){
+  const h=Number(m.homeScore)||0,a=Number(m.awayScore)||0;
+  const pens=h===a&&m.stage!=='group'&&m.stage!=='manual'&&m.homePenalties!=null&&m.awayPenalties!=null?` (${m.homePenalties}-${m.awayPenalties} pens)`:'';
+  return h+' - '+a+pens+(m.resultNote==='walkover'?' (walkover)':'');
+}
+function winnerOf(m){
+  const side=matchWinnerSide(m);if(!side)return null;
+  return side==='home'?{id:m.homeRegistrationId,name:m.home}:{id:m.awayRegistrationId,name:m.away};
+}
+async function syncKnockoutInner(){
+  let changed=false;
+  for(const t of tournaments.filter(isGK)){
+    const names=groupNames(t);
+    const gm=matches.filter(m=>m.tournamentId===t.id&&m.stage==='group');
+    if(gm.length!==names.length*6||gm.some(m=>m.status!=='Completed'))continue;
+    const st={};names.forEach(g=>{st[g]=getGroupStandings(t.id,g);});
+    if(names.some(g=>st[g].length!==4))continue;
+    try{
+      const ins=async(stage,h,a)=>{changed=(await insertProgressionMatch(t.id,stage,h,a))||changed;};
+      const findIn=(stage,p)=>matches.find(m=>m.tournamentId===t.id&&m.stage===stage&&(m.homeRegistrationId===p.id||m.awayRegistrationId===p.id));
+      const pairs=bracketPairs(t).map(([a,b])=>[st[a.g][a.i],st[b.g][b.i]]);
+      let size=pairs.length,stage=KO_STAGE[size];
+      for(const [h,a] of pairs)await ins(stage,h,a);
+      let cur=pairs.map(([h])=>findIn(stage,h));
+      while(size>1){
+        size/=2;stage=KO_STAGE[size];const next=[];
+        for(let k=0;k<size;k++){
+          const w1=winnerOf(cur[2*k]),w2=winnerOf(cur[2*k+1]);
+          if(w1&&w2){await ins(stage,w1,w2);next.push(findIn(stage,w1));}else next.push(undefined);
+        }
+        cur=next;
+      }
+      const ch=getChampion(t.id);if(ch)changed=(await saveChampion(t,ch))||changed;
+    }catch(err){console.error('Knockout progression:',err);toast('Knockout progression could not be saved: '+err.message);}
+  }
+  if(changed)renderMatches();
+}
+
+
+function removePlayer(id){return removePlayerAsync(id);}
+async function removePlayerAsync(id){
+  if(!requireOrganizer())return;
+  const r=registrations.find(x=>x.id===id);if(!r)return;
+  if(groupAssignments.some(g=>g.registration_id===id)){toast('Groups are already made, so this player cannot be removed now.');return;}
+  if(!confirm('Remove '+r.name+' ('+r.tag+')? Their place will be free for another player to register.'))return;
+  const {data,error}=await supabaseClient.from('registrations').delete().eq('id',id).select();
+  if(error){toast('Could not remove player: '+error.message);return;}
+  if(!data||!data.length){toast('Could not remove player. Run the new SQL step first.');return;}
+  logAudit('player removed','registration:'+id,{player:r.name,tag:r.tag});
+  await loadData();toast('Player removed. Their place is free.');
+}
+function getChampion(tid){
+  const f=matches.find(m=>m.tournamentId===tid&&m.stage==='final');
+  const side=matchWinnerSide(f);if(!side)return null;
+  const hw=side==='home',wId=hw?f.homeRegistrationId:f.awayRegistrationId;
+  const gp=groupAssignments.find(p=>p.tournament_id===tid&&p.registration_id===wId);
+  const level=Number(f.homeScore)===Number(f.awayScore);
+  const score=level?`${f.homeScore}-${f.awayScore} (${hw?f.homePenalties:f.awayPenalties}-${hw?f.awayPenalties:f.homePenalties} pens)`:Math.max(f.homeScore,f.awayScore)+'-'+Math.min(f.homeScore,f.awayScore);
+  return {name:hw?f.home:f.away,tag:gp?.gamer_tag||'',runnerUp:hw?f.away:f.home,score};
+}
+async function saveChampion(t,ch){
+  const ex=championRecords.find(r=>r.tournament_id===t.id);
+  if(ex&&ex.champion_name===ch.name&&ex.final_score===ch.score)return false;
+  const payload={tournament_id:t.id,organizer_id:currentUser.id,tournament_name:t.name,game:t.game,champion_name:ch.name,champion_tag:ch.tag,runner_up_name:ch.runnerUp,final_score:ch.score};
+  const {data,error}=await supabaseClient.from('tournament_champions').upsert(payload,{onConflict:'tournament_id'}).select().single();
+  if(error){console.warn('Champion not saved:',error);toast('Champion history could not be saved: '+error.message);return false;}
+  championRecords=[data,...championRecords.filter(r=>r.tournament_id!==t.id)];return true;
+}
+function isGK(t){return t.format==='Groups + Knockout'&&[8,16,32,64].includes(Number(t.slots));}
+function isGK8(t){return isGK(t);}
+function groupNames(t){return 'ABCDEFGHIJKLMNOP'.split('').slice(0,Number(t.slots)/4);}
+const KO_STAGE={1:'final',2:'semi_final',4:'quarter_final',8:'round_of_16',16:'round_of_32'};
+const KO_LABEL={1:'FINAL',2:'SEMI-FINAL',4:'QUARTER-FINAL',8:'ROUND OF 16',16:'ROUND OF 32'};
+const KO_RANK={round_of_32:0,round_of_16:1,quarter_final:2,semi_final:3,final:4};
+function stageLabel(s){return ({round_of_32:'Round of 32',round_of_16:'Round of 16',quarter_final:'Quarter-final',semi_final:'Semi-final',final:'Final'})[s]||'Match';}
+function bracketPairs(t){
+  const n=groupNames(t),first=[],second=[];
+  for(let k=0;k<n.length/2;k++){first.push([{g:n[2*k],i:0},{g:n[2*k+1],i:1}]);second.push([{g:n[2*k+1],i:0},{g:n[2*k],i:1}]);}
+  return [...first,...second];
+}
+function matchCardHtml(m){
+  const t=tournaments.find(x=>x.id===m.tournamentId);
+  const label=m.stage==='group'?'Group '+(m.groupName||''):stageLabel(m.stage);
+  const tag=m.status==='Ongoing'?'<span class="state-ongoing">● LIVE</span>':m.status==='Completed'?'<span class="state-completed">FULL TIME</span>':'<span class="state-upcoming">UPCOMING</span>';
+  return `<div class="livecard ${m.status==='Ongoing'?'live':''}"><div class="live-meta"><span>${escapeHtml(t?t.name:'')} · ${label}</span>${tag}</div><div class="live-row"><span class="live-team">${escapeHtml(m.home)}</span><span class="live-score">${scoreText(m).replace(/ \(.*$/,'')}</span><span class="live-team right">${escapeHtml(m.away)}</span></div>${m.stage!=='group'&&scoreText(m).includes('pens')?`<div class="live-meta" style="margin:8px 0 0;justify-content:center">${scoreText(m).match(/\(.*\)/)[0]}</div>`:''}</div>`;
+}
+function groupTablesHtml(t){
+  return '<div class="group-wrap">'+groupNames(t).map(g=>`<div class="card"><div class="cardhead"><h2>Group ${g}</h2></div><div class="group-table-wrap"><table class="group-table"><thead><tr><th>Pos</th><th>Player</th><th>P</th><th>W</th><th>D</th><th>L</th><th>GF</th><th>GA</th><th>GD</th><th>Pts</th></tr></thead><tbody>${getGroupStandings(t.id,g).map((p,i)=>`<tr><td>${i+1}</td><td>${escapeHtml(p.name)}</td><td>${p.played}</td><td>${p.wins}</td><td>${p.draws}</td><td>${p.losses}</td><td>${p.gf}</td><td>${p.ga}</td><td>${p.gd}</td><td><strong>${p.points}</strong></td></tr>`).join('')}</tbody></table></div></div>`).join('')+'</div>';
+}
+function pyramidHtml(t){
+  if(!groupAssignments.some(p=>p.tournament_id===t.id))return '';
+  const names=groupNames(t),G=names.length;
+  const tm=matches.filter(m=>m.tournamentId===t.id),gm=tm.filter(m=>m.stage==='group'),ch=getChampion(t.id);
+  const done=gm.length===G*6&&gm.every(m=>m.status==='Completed');
+  const box=(top,main,cls)=>`<div class="pyr-box ${cls||''}"><small>${top}</small>${main}</div>`;
+  const mt=(m,label,tiny)=>m?box(label,`${escapeHtml(m.home)} <b>${scoreText(m).replace(/ /g,'')}</b> ${escapeHtml(m.away)}`,(m.status==='Completed'?'':'dim ')+(tiny?'tiny':'')):box(label,'To be decided','dim '+(tiny?'tiny':''));
+  let rows='';
+  for(let size=1;size<=G;size*=2){
+    const list=tm.filter(m=>m.stage===KO_STAGE[size]);
+    rows+=`<div class="pyr-row">${Array.from({length:size},(_,i)=>mt(list[i],KO_LABEL[size],size>4)).join('')}</div>`;
+  }
+  const q=bracketPairs(t).flat().map(({g,i})=>{const p=getGroupStandings(t.id,g)[i];return box('GROUP '+g+' · '+(i===0?'1ST':'2ND'),p?escapeHtml(p.name):'?',(done?'':'dim ')+(G>4?'tiny':''));}).join('');
+  return `<div class="pyramid"><div class="pyr-row"><div class="pyr-cup">🏆</div></div><div class="pyr-row">${ch?`<div class="pyr-champ">${escapeHtml(ch.name)}</div>`:'<div class="pyr-wait">Champion to be decided</div>'}</div>${rows}<div class="pyr-row">${q}</div></div>`;
+}
+function historyHtml(){
+  if(!championRecords.length)return '<div class="empty">No champions yet. The first champion appears here after a final is completed.</div>';
+  return '<div class="livegrid">'+championRecords.map(r=>`<div class="champcard"><div class="champ-cup">🏆</div><div><strong>${escapeHtml(r.champion_name)}</strong>${r.champion_tag?` <small>(${escapeHtml(r.champion_tag)})</small>`:''}<div class="match-meta"><span>${escapeHtml(r.tournament_name)}</span><span>•</span><span>${new Date(r.won_at).toLocaleDateString()}</span></div><div class="match-meta"><span>Final: beat ${escapeHtml(r.runner_up_name||'')} ${escapeHtml(r.final_score||'')}</span></div><button class="smallbtn" style="margin-top:8px" onclick="openAwardRecord('${r.id}')">Award image</button>${currentUser&&r.organizer_id===currentUser.id?` <button class="smallbtn danger" style="margin-top:8px" onclick="removeChampion('${r.id}')">Delete</button>`:''}</div></div>`).join('')+'</div>';
+}
+function liveHtml(){
+  if(!tournaments.length)return '<div class="empty">No tournaments yet.</div>';
+  const secs=[['Ongoing','● Live now'],['Upcoming','Coming up'],['Completed','Results']];
+  const lists=secs.map(([st,title])=>{const l=matches.filter(m=>m.status===st);return `<div class="card" style="margin-bottom:14px"><div class="cardhead"><h2>${title}</h2><span>${l.length}</span></div><div class="cardbody livegrid">${l.length?l.map(matchCardHtml).join(''):'<div class="empty">Nothing here right now.</div>'}</div></div>`;}).join('');
+  const boards=tournaments.filter(isGK8).filter(t=>groupAssignments.some(p=>p.tournament_id===t.id)).map(t=>`<div class="card" style="margin-bottom:14px"><div class="cardhead"><h2>${escapeHtml(t.name)} · Road to the trophy</h2></div><div class="cardbody">${pyramidHtml(t)}${groupTablesHtml(t)}</div></div>`).join('');
+  return announcementsHtml()+lists+boards;
+}
+function renderLive(){
+  const lv=$('liveView');if(lv)lv.innerHTML=liveHtml();
+  const hv=$('historyView');if(hv)hv.innerHTML=historyHtml();
+  const lu=$('lastUpdated');if(lu)lu.textContent='Last updated: '+new Date().toLocaleTimeString();
+  const fc=$('fanContent');if(fc)fc.innerHTML=liveHtml()+'<h2 style="margin:24px 0 12px">Champion history</h2>'+historyHtml();
+}
+function fanUrl(){const u=new URL(location.href);u.search='';u.hash='';u.searchParams.set('live','1');return u.toString();}
+function shareText(title,url){
+  if(navigator.share){navigator.share({title,text:title,url}).catch(()=>{});return;}
+  window.open('https://wa.me/?text='+encodeURIComponent(title+' '+url),'_blank');
+}
+function shareFan(){if(location.protocol==='file:'){toast('Upload this page to a web host first.');return;}shareText('Follow the live scores on Tournament Hub',fanUrl());}
+function shareRegistration(id){
+  const t=tournaments.find(x=>x.id===id);if(!t)return;
+  if(location.protocol==='file:'){toast('Upload this page to a web host first.');return;}
+  const u=new URL(location.href);u.search='';u.hash='';u.searchParams.set('register',t.id);
+  shareText('Register for '+t.name+' on Tournament Hub',u.toString());
+}
+function shareAward(){
+  $('awardCanvas').toBlob(async b=>{
+    const file=new File([b],'champion.png',{type:'image/png'});
+    if(navigator.canShare&&navigator.canShare({files:[file]})){try{await navigator.share({files:[file],title:'Champion '+(awardInfo?.name||'')});}catch(e){}}
+    else{downloadAward();toast('Image downloaded. Attach it in WhatsApp or any app.');}
+  });
+}
+function copyFanLink(){
+  if(location.protocol==='file:'){toast('Upload this page to a web host first.');return;}
+  const u=new URL(location.href);u.search='';u.hash='';u.searchParams.set('live','1');
+  const v=u.toString();
+  if(navigator.clipboard?.writeText)navigator.clipboard.writeText(v).then(()=>toast('Fan page link copied.')).catch(()=>fallbackCopy(v));else fallbackCopy(v);
+}
+function fitText(c,text,maxW,px,weight){let size=px;do{c.font=weight+' '+size+'px Segoe UI, Arial, sans-serif';size-=2;}while(c.measureText(text).width>maxW&&size>20);}
+function drawTrophy(c,cx,top,s){
+  const g=c.createLinearGradient(cx-150*s,0,cx+150*s,0);g.addColorStop(0,'#b8860b');g.addColorStop(.5,'#ffe27a');g.addColorStop(1,'#b8860b');
+  c.fillStyle=g;c.strokeStyle=g;c.lineWidth=22*s;c.lineCap='round';
+  c.beginPath();c.moveTo(cx-140*s,top);c.lineTo(cx+140*s,top);c.bezierCurveTo(cx+140*s,top+200*s,cx+60*s,top+290*s,cx+20*s,top+300*s);c.lineTo(cx-20*s,top+300*s);c.bezierCurveTo(cx-60*s,top+290*s,cx-140*s,top+200*s,cx-140*s,top);c.fill();
+  [-1,1].forEach(d=>{c.beginPath();c.moveTo(cx+d*135*s,top+30*s);c.bezierCurveTo(cx+d*240*s,top+30*s,cx+d*230*s,top+190*s,cx+d*90*s,top+210*s);c.stroke();});
+  c.fillRect(cx-18*s,top+300*s,36*s,90*s);c.fillRect(cx-90*s,top+390*s,180*s,26*s);c.fillRect(cx-130*s,top+416*s,260*s,34*s);
+  c.fillStyle='#8a6414';c.textAlign='center';c.font='900 '+Math.round(120*s)+'px Segoe UI, Arial, sans-serif';c.fillText('★',cx,top+160*s);
+}
+function drawAward(info){
+  const cv=$('awardCanvas'),c=cv.getContext('2d'),W=1080,H=1350;
+  const bg=c.createLinearGradient(0,0,0,H);bg.addColorStop(0,'#080D1B');bg.addColorStop(1,'#2a1a5e');c.fillStyle=bg;c.fillRect(0,0,W,H);
+  const gl=c.createRadialGradient(W/2,560,40,W/2,560,520);gl.addColorStop(0,'rgba(255,214,102,.35)');gl.addColorStop(1,'rgba(255,214,102,0)');c.fillStyle=gl;c.fillRect(0,0,W,H);
+  c.strokeStyle='#d9a935';c.lineWidth=8;c.strokeRect(36,36,W-72,H-72);c.lineWidth=2;c.strokeRect(58,58,W-116,H-116);
+  c.textAlign='center';
+  c.fillStyle='#3d8bff';c.font='700 32px Segoe UI, Arial, sans-serif';c.fillText('TOURNAMENT HUB',W/2,125);
+  c.fillStyle='#ffe27a';c.font='900 96px Segoe UI, Arial, sans-serif';c.fillText('CHAMPION',W/2,240);
+  c.fillStyle='#ffffff';fitText(c,info.tournament,W-200,42,'600');c.fillText(info.tournament,W/2,305);
+  drawTrophy(c,W/2,350,1.3);
+  c.fillStyle='#ffffff';fitText(c,info.name,W-160,110,'900');c.fillText(info.name,W/2,1010);
+  if(info.tag){c.fillStyle='#3d8bff';fitText(c,info.tag,W-200,44,'700');c.fillText(info.tag,W/2,1075);}
+  c.fillStyle='#AAB8D2';c.font='600 34px Segoe UI, Arial, sans-serif';c.fillText(info.date,W/2,1190);
+  c.fillStyle='#ffe27a';c.font='700 30px Segoe UI, Arial, sans-serif';c.fillText('★  WINNER  ★',W/2,1260);
+}
+function showAward(info){awardInfo=info;$('awardBg').classList.add('show');drawAward(info);}
+function closeAward(){$('awardBg').classList.remove('show');}
+function openAward(tid){
+  const ch=getChampion(tid),t=tournaments.find(x=>x.id===tid),rec=championRecords.find(r=>r.tournament_id===tid);
+  if(!ch||!t){toast('No champion yet.');return;}
+  showAward({name:ch.name,tag:ch.tag,tournament:t.name,date:new Date(rec?rec.won_at:Date.now()).toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'})});
+}
+async function removeChampion(id){
+  if(!requireOrganizer())return;
+  const r=championRecords.find(x=>x.id===id);if(!r)return;
+  if(tournaments.some(t=>t.id===r.tournament_id)&&getChampion(r.tournament_id)){toast('Delete the tournament first, or this champion will be saved again.');return;}
+  if(!confirm('Delete '+r.champion_name+' ('+r.tournament_name+') from champion history? This cannot be undone.'))return;
+  const {data,error}=await supabaseClient.from('tournament_champions').delete().eq('id',id).select();
+  if(error){toast('Could not delete: '+error.message);return;}
+  if(!data||!data.length){toast('Could not delete. Permission is missing.');return;}
+  championRecords=championRecords.filter(x=>x.id!==id);renderLive();toast('Champion removed from history.');
+}
+function openAwardRecord(id){
+  const r=championRecords.find(x=>x.id===id);if(!r)return;
+  showAward({name:r.champion_name,tag:r.champion_tag||'',tournament:r.tournament_name,date:new Date(r.won_at).toLocaleDateString(undefined,{year:'numeric',month:'long',day:'numeric'})});
+}
+function downloadAward(){
+  $('awardCanvas').toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='champion-'+(awardInfo?.name||'award').replace(/[^a-z0-9]+/gi,'-')+'.png';document.body.appendChild(a);a.click();a.remove();});
+}
+function initFanPage(){
+  if(!new URLSearchParams(location.search).get('live'))return;
+  document.querySelector('.layout').style.display='none';$('fanPage').style.display='block';
+}
+let refreshing=false;
+async function autoRefresh(){
+  if(isPublicPage()||refreshing||document.querySelector('.modalbg.show'))return;
+  refreshing=true;try{await loadData(true);}catch(e){console.warn('Auto refresh failed:',e);}finally{refreshing=false;}
+}
+setInterval(autoRefresh,15000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)autoRefresh();});
+window.addEventListener('focus',autoRefresh);
+$('awardBg').addEventListener('click',e=>{if(e.target===$('awardBg'))closeAward();});
+
+
+const COUNTRY_CODES='AF AX AL DZ AS AD AO AI AG AR AM AW AU AT AZ BS BH BD BB BY BE BZ BJ BM BT BO BQ BA BW BR IO BN BG BF BI CV KH CM CA KY CF TD CL CN CX CC CO KM CG CD CK CR CI HR CU CW CY CZ DK DJ DM DO EC EG SV GQ ER EE SZ ET FK FO FJ FI FR GF PF GA GM GE DE GH GI GR GL GD GP GU GT GG GN GW GY HT VA HN HK HU IS IN ID IR IQ IE IM IL IT JM JP JE JO KZ KE KI KP KR KW KG LA LV LB LS LR LY LI LT LU MO MG MW MY MV ML MT MH MQ MR MU YT MX FM MD MC MN ME MS MA MZ MM NA NR NP NL NC NZ NI NE NG NU NF MK MP NO OM PK PW PS PA PG PY PE PH PN PL PT PR QA RE RO RU RW BL SH KN LC MF PM VC WS SM ST SA SN RS SC SL SG SX SK SI SB SO ZA SS ES LK SD SR SJ SE CH SY TW TJ TZ TH TL TG TK TO TT TN TR TM TC TV UG UA AE GB US UY UZ VU VE VN VG VI WF EH YE ZM ZW'.split(' ');
+const CLUBS=['Arsenal','Aston Villa','Brighton','Chelsea','Everton','Liverpool','Manchester City','Manchester United','Newcastle United','Tottenham Hotspur','West Ham United','Leicester City','Leeds United','Real Madrid','Barcelona','Atlético Madrid','Sevilla','Valencia','Villarreal','Real Sociedad','Athletic Club','Real Betis','Juventus','AC Milan','Inter Milan','Napoli','Roma','Lazio','Atalanta','Fiorentina','Bayern Munich','Borussia Dortmund','RB Leipzig','Bayer Leverkusen','Eintracht Frankfurt','Paris Saint-Germain','Marseille','Lyon','Monaco','Lille','Ajax','PSV Eindhoven','Feyenoord','Benfica','Porto','Sporting CP','Celtic','Rangers','Galatasaray','Fenerbahçe','Beşiktaş','Al Nassr','Al Hilal','Inter Miami','Asante Kotoko','Hearts of Oak','Orlando Pirates','Kaizer Chiefs','Al Ahly','Zamalek','Flamengo','Boca Juniors','River Plate'];
+const GAME_LIST=['EA Sports FC / FIFA','eFootball','PUBG Mobile','Call of Duty Mobile','Other mobile games','PC games'];
+const PLATFORMS=['Mobile','PC','PlayStation','Xbox','Other'];
+let regionNames=null;
+function countryName(c){try{regionNames=regionNames||new Intl.DisplayNames(['en'],{type:'region'});return regionNames.of(c)||c;}catch(e){return c;}}
+function flagImg(c){return c?`<img class="flag" src="https://flagcdn.com/24x18/${c.toLowerCase()}.png" alt="${escapeHtml(countryName(c))} flag">`:'';}
+function avatarHtml(url,name,big){const cls=big?'avatar-lg':'avatar';return url?`<img class="${cls}" src="${escapeHtml(url)}" alt="${escapeHtml(name||'Player')} avatar">`:`<div class="${cls}">${escapeHtml((name||'?').charAt(0).toUpperCase())}</div>`;}
+
+function playerButtonClick(){if(playerUser){signOut();return;}if(currentUser){showView('profile');return;}openPlayerAuth();}
+function openPlayerAuth(){paMode='in';applyPaMode();$('playerAuthBg').classList.add('show');showCaptcha('paCaptcha');}
+function closePlayerAuth(){$('playerAuthBg').classList.remove('show');}
+function togglePlayerMode(){paMode=paMode==='in'?'up':'in';applyPaMode();}
+function applyPaMode(){
+  const up=paMode==='up';
+  $('paTitle').textContent=up?'Create player account':'Player sign in';
+  $('paSubmit').textContent=up?'Create account':'Sign in';
+  $('paToggle').textContent=up?'I already have an account':'Create an account instead';
+  $('paSignupFields').style.display=up?'block':'none';
+  $('paUsername').required=up;$('paPassword').autocomplete=up?'new-password':'current-password';
+}
+$('playerAuthForm').addEventListener('submit',async e=>{
+  e.preventDefault();$('paSubmit').disabled=true;
+  try{
+    const email=$('paEmail').value.trim(),password=$('paPassword').value;
+    if(!captchaReady('paCaptcha'))return;
+    if(paMode==='up'){
+      const username=$('paUsername').value.trim().toLowerCase();
+      const {data,error}=await supabaseClient.auth.signUp({email,password,options:{data:{username,display_name:$('paDisplay').value.trim()||username},...captchaOpts('paCaptcha')}});
+      captchaReset('paCaptcha');
+      if(error)throw error;
+      if(!data.session){closePlayerAuth();$('playerAuthForm').reset();toast('Account created. Check your email to confirm it, then sign in.');return;}
+      await applySession(data.user);toast('Account created. Complete your profile.');
+    }else{
+      const {data,error}=await supabaseClient.auth.signInWithPassword({email,password,options:captchaOpts('paCaptcha')});
+      captchaReset('paCaptcha');
+      if(error)throw error;
+      await applySession(data.user);
+      if(currentUser&&!ADMIN_LINK){await supabaseClient.auth.signOut();await applySession(null);throw new Error('Invalid login credentials');}
+      toast('Signed in.');
+    }
+    closePlayerAuth();$('playerAuthForm').reset();await loadData();showView('profile');
+  }catch(err){toast((paMode==='up'?'Could not create account: ':'Sign-in failed: ')+err.message);}
+  finally{$('paSubmit').disabled=false;captchaReset('paCaptcha');}
+});
+
+function renderProfileForm(){
+  const box=$('profileBox');if(!box)return;
+  if(profileDirty&&box.querySelector('form'))return;
+  const user=currentUser||playerUser;
+  if(!user){box.innerHTML='<div class="card"><div class="cardbody"><div class="empty">Sign in or create a player account to build your profile.</div><button class="primary" onclick="openPlayerAuth()">Player sign in</button></div></div>';return;}
+  if(!myProfile){box.innerHTML='<div class="card"><div class="cardbody"><div class="empty">Your profile is not ready yet. The player accounts database update has not been applied.</div></div></div>';return;}
+  const p=myProfile,games=p.games||[];
+  const countries=COUNTRY_CODES.map(c=>[c,countryName(c)]).sort((a,b)=>a[1].localeCompare(b[1]));
+  box.innerHTML=`<div class="card"><div class="cardbody"><form id="profileForm" oninput="profileDirty=true" onsubmit="saveProfile(event)">
+  <div style="display:flex;gap:16px;align-items:center;margin-bottom:14px"><div id="pfAvatarBox">${avatarHtml(p.avatar_url,p.display_name||p.username,true)}</div><div class="field" style="flex:1"><label>Profile picture (JPG, PNG or WebP)</label><input type="file" id="pfAvatar" accept="image/jpeg,image/png,image/webp" onchange="pfAvatarChange(this)"></div></div>
+  <p class="muted-note" style="margin:0 0 12px">Account type: <strong>${escapeHtml(p.role)}</strong></p>
+  <div class="pfgrid">
+   <div class="field"><label>Username (public)</label><input id="pfUsername" maxlength="20" value="${escapeHtml(p.username||'')}" placeholder="e.g. kojo_fc"></div>
+   <div class="field"><label>Display name</label><input id="pfDisplay" maxlength="40" value="${escapeHtml(p.display_name||'')}"></div>
+   <div class="field"><label>Country</label><select id="pfCountry"><option value="">Not set</option>${countries.map(([c,n])=>`<option value="${c}" ${p.country_code===c?'selected':''}>${escapeHtml(n)}</option>`).join('')}</select></div>
+   <div class="field"><label>Favourite football club (optional)</label><input id="pfClub" list="clubList" maxlength="60" value="${escapeHtml(p.favourite_club||'')}" placeholder="Type or choose a club"><datalist id="clubList">${CLUBS.map(c=>`<option value="${escapeHtml(c)}">`).join('')}</datalist></div>
+   <div class="field"><label>Gaming platform</label><select id="pfPlatform"><option value="">Not set</option>${PLATFORMS.map(x=>`<option ${p.platform===x?'selected':''}>${x}</option>`).join('')}</select></div>
+  </div>
+  <div class="field"><label>Games you play</label>${GAME_LIST.map(g=>`<label class="checkrow"><input type="checkbox" name="pfGame" value="${escapeHtml(g)}" ${games.includes(g)?'checked':''}> ${escapeHtml(g)}</label>`).join('')}</div>
+  <div class="field"><label>Short biography (max 200 characters)</label><textarea id="pfBio" maxlength="200" rows="3">${escapeHtml(p.bio||'')}</textarea></div>
+  <div class="field"><label>Privacy</label>
+   <label class="checkrow"><input type="checkbox" id="pfPublic" ${p.is_public?'checked':''}> Show my profile in the player directory</label>
+   <label class="checkrow"><input type="checkbox" id="pfShowCountry" ${p.show_country?'checked':''}> Show my country</label>
+   <label class="checkrow"><input type="checkbox" id="pfShowClub" ${p.show_club?'checked':''}> Show my favourite club</label>
+   <label class="checkrow"><input type="checkbox" id="pfShowBio" ${p.show_bio?'checked':''}> Show my biography</label></div>
+  <p class="muted-note">Your email, password and account type are never shown to other players. A profile appears in the directory only when it has a username.</p>
+  <div class="modalactions"><button class="primary" type="submit" id="pfSave">Save profile</button></div></form></div></div>`;
+}
+function pfAvatarChange(input){
+  const f=input.files&&input.files[0];if(!f)return;
+  if(f.size>8*1024*1024){toast('Please choose a picture smaller than 8 MB.');input.value='';return;}
+  avatarFile=f;profileDirty=true;
+  $('pfAvatarBox').innerHTML=`<img class="avatar-lg" src="${URL.createObjectURL(f)}" alt="New avatar preview">`;
+}
+function resizeAvatar(file){
+  return new Promise((resolve,reject)=>{
+    const img=new Image();img.onload=()=>{
+      const c=document.createElement('canvas');c.width=c.height=256;const x=c.getContext('2d');
+      const m=Math.min(img.width,img.height);x.drawImage(img,(img.width-m)/2,(img.height-m)/2,m,m,0,0,256,256);
+      c.toBlob(b=>b?resolve(b):reject(new Error('Could not process the picture.')),'image/jpeg',0.85);
+    };img.onerror=()=>reject(new Error('That file is not a valid picture.'));img.src=URL.createObjectURL(file);
+  });
+}
+async function saveProfile(e){
+  e.preventDefault();
+  const user=currentUser||playerUser;if(!user||!myProfile)return;
+  const btn=$('pfSave');btn.disabled=true;
+  try{
+    const username=$('pfUsername').value.trim().toLowerCase();
+    if(username&&!/^[a-z0-9_]{3,20}$/.test(username))throw new Error('Username must be 3 to 20 letters, numbers or _.');
+    let avatar_url=myProfile.avatar_url;
+    if(avatarFile){
+      const blob=await resizeAvatar(avatarFile),path=user.id+'/avatar-'+Date.now()+'.jpg';
+      const {error:ue}=await supabaseClient.storage.from('avatars').upload(path,blob,{contentType:'image/jpeg',upsert:true});
+      if(ue)throw ue;
+      avatar_url=supabaseClient.storage.from('avatars').getPublicUrl(path).data.publicUrl;
+    }
+    const upd={username:username||null,display_name:$('pfDisplay').value.trim()||null,avatar_url,country_code:$('pfCountry').value||null,favourite_club:$('pfClub').value.trim()||null,platform:$('pfPlatform').value||null,bio:$('pfBio').value.trim()||null,games:[...document.querySelectorAll('input[name=pfGame]:checked')].map(i=>i.value),is_public:$('pfPublic').checked,show_country:$('pfShowCountry').checked,show_club:$('pfShowClub').checked,show_bio:$('pfShowBio').checked,updated_at:new Date().toISOString()};
+    const {data,error}=await supabaseClient.from('profiles').update(upd).eq('id',user.id).select().single();
+    if(error){if(error.code==='23505')throw new Error('That username is already taken.');throw error;}
+    myProfile=data;avatarFile=null;profileDirty=false;renderProfileForm();toast('Profile saved.');
+  }catch(err){toast('Could not save profile: '+err.message);const b=$('pfSave');if(b)b.disabled=false;}
+}
+async function loadDirectory(){
+  const box=$('dirList');if(!box)return;
+  const {data,error}=await supabaseClient.from('public_profiles').select('*').order('display_name',{ascending:true});
+  if(error){box.innerHTML='<div class="empty">The player directory is not available yet.</div>';console.warn(error);return;}
+  directory=data||[];renderDirectory();
+}
+function renderDirectory(){
+  const box=$('dirList');if(!box)return;
+  const q=($('dirSearch').value||'').trim().toLowerCase();
+  const list=directory.filter(p=>!q||[p.display_name,p.username,p.country_code?countryName(p.country_code):'',...(p.games||[])].join(' ').toLowerCase().includes(q));
+  box.innerHTML=list.length?list.map(p=>`<div class="livecard dircard" onclick="openPlayerProfile('${p.id}')">${avatarHtml(p.avatar_url,p.display_name||p.username)}<div><strong>${escapeHtml(p.display_name||p.username)}</strong><div class="match-meta"><span>@${escapeHtml(p.username)}</span></div>${p.country_code?`<div class="match-meta">${flagImg(p.country_code)}<span>${escapeHtml(countryName(p.country_code))}</span></div>`:''}</div></div>`).join(''):'<div class="empty">No players found.</div>';
+}
+function openPlayerProfile(id){
+  const p=directory.find(x=>x.id===id);if(!p)return;
+  $('profileViewBody').innerHTML=`<div style="display:flex;gap:16px;align-items:center;margin-bottom:12px">${avatarHtml(p.avatar_url,p.display_name||p.username,true)}<div><h2 style="margin:0">${escapeHtml(p.display_name||p.username)}</h2><div class="match-meta"><span>@${escapeHtml(p.username)}</span></div>${p.country_code?`<div class="match-meta">${flagImg(p.country_code)}<span>${escapeHtml(countryName(p.country_code))}</span></div>`:''}</div></div>${p.favourite_club?`<p>⚽ Favourite club: <strong>${escapeHtml(p.favourite_club)}</strong></p>`:''}${p.platform?`<p>🎮 Platform: ${escapeHtml(p.platform)}</p>`:''}${(p.games||[]).length?`<div>${p.games.map(g=>`<span class="chip">${escapeHtml(g)}</span>`).join('')}</div>`:''}${p.bio?`<p style="margin-top:12px">${escapeHtml(p.bio)}</p>`:''}<p class="muted-note">Tournament history, wins and rankings will appear here once confirmed match results are linked to player accounts.</p>`;
+  $('profileViewBg').classList.add('show');
+}
+$('playerAuthBg').addEventListener('click',e=>{if(e.target===$('playerAuthBg'))closePlayerAuth();});
+$('profileViewBg').addEventListener('click',e=>{if(e.target===$('profileViewBg'))$('profileViewBg').classList.remove('show');});
+
+
+const ADMIN_LINK=(()=>{try{if(new URLSearchParams(location.search).has('admin'))sessionStorage.setItem('adminLink','1');return sessionStorage.getItem('adminLink')==='1';}catch(e){return new URLSearchParams(location.search).has('admin');}})();
+function isAdmin(){return myProfile&&myProfile.role==='admin';}
+async function logAudit(action,target,details){
+  try{await supabaseClient.from('audit_log').insert({actor_id:(currentUser||{}).id,action,target,details:details||{}});}catch(e){console.warn('Audit log:',e);}
+}
+async function loadSettings(){
+  try{const {data,error}=await supabaseClient.from('app_settings').select('*');if(error)throw error;(data||[]).forEach(r=>{appSettings[r.key]=r.value;});}catch(e){return;}
+  applyMaintenance();
+}
+function applyMaintenance(){
+  const m=appSettings.maintenance||{},on=!!m.enabled&&!isAdmin(),el=$('maintenanceOverlay');
+  if(!el)return;el.style.display=on?'flex':'none';$('maintAdminBtn').style.display=ADMIN_LINK?'':'none';$('maintMsg').textContent=m.message||'We are making improvements and will be back soon.';
+}
+function setWalkover(side){
+  if(side===null){walkoverNote=null;return;}
+  walkoverNote='walkover';
+  $('mHomeScore').value=side==='home'?3:0;$('mAwayScore').value=side==='home'?0:3;
+  $('mHomePen').value='';$('mAwayPen').value='';$('mStatus').value='Completed';
+  toast('Walkover filled in. Click Save match to confirm.');
+}
+async function setRegFlag(id,field,value){
+  if(!requireOrganizer())return;
+  const col=field==='checkedIn'?'checked_in':'no_show',upd={[col]:value};
+  if(value)upd[col==='checked_in'?'no_show':'checked_in']=false;
+  const {data,error}=await supabaseClient.from('registrations').update(upd).eq('id',id).select();
+  if(error){toast('Could not update: '+error.message);return;}
+  if(!data||!data.length){toast('Could not update. Run the latest database update first.');return;}
+  const r=registrations.find(x=>x.id===id);
+  logAudit(col+(value?' set':' cleared'),'registration:'+id,{player:r?r.name:''});
+  await loadData();
+}
+/* ---------- Help & support ---------- */
+const FAQ=[
+['How do I register for a tournament?','Open the registration link the organizer sent you, enter your full name and gamer tag, and submit.'],
+['Do I need an account to play?','No. You can register with just your name and gamer tag. A player account gives you a profile and a place in the Community directory.'],
+['How are group standings worked out?','A win gives 3 points, a draw 1 and a loss 0. Ties are split by goal difference, then goals scored, then gamer tag.'],
+['What happens when a knockout match is level?','The organizer records the penalty scores. The player who wins the penalties goes through.'],
+['Who can see my information?','Only what you choose to show on your profile. Your email is never shown to other players.'],
+['How do I follow matches?','Open the fan page link from the organizer, or use Live scores. It updates by itself every 15 seconds.'],
+['My question is not here.','Send us a message with the form on this page.']];
+function renderFaq(){const b=$('faqList');if(b)b.innerHTML=FAQ.map(([q,a])=>`<details style="margin-bottom:8px"><summary style="cursor:pointer;font-weight:700">${escapeHtml(q)}</summary><p class="muted-note">${escapeHtml(a)}</p></details>`).join('');}
+async function loadMySupport(){
+  renderFaq();
+  const user=currentUser||playerUser,box=$('mySupport');if(!box)return;
+  if(!user){box.innerHTML='<div class="empty">Sign in to see your requests and our replies.</div>';return;}
+  const {data,error}=await supabaseClient.from('support_requests').select('*').eq('user_id',user.id).order('created_at',{ascending:false});
+  if(error){box.innerHTML='<div class="empty">Support requests are not available yet.</div>';return;}
+  supportMine=data||[];
+  box.innerHTML=supportMine.length?supportMine.map(r=>`<div class="tourrow"><div><strong>${escapeHtml(r.category)} · ${escapeHtml(r.status.replace('_',' '))}</strong><small>${escapeHtml(r.message)}</small>${r.admin_reply?`<small style="color:var(--green)">Reply: ${escapeHtml(r.admin_reply)}</small>`:''}</div></div>`).join(''):'<div class="empty">You have not sent any requests.</div>';
+}
+$('supportForm').addEventListener('submit',async e=>{
+  e.preventDefault();const user=currentUser||playerUser;
+  const row={user_id:user?user.id:null,name:$('spName').value.trim()||null,email:$('spEmail').value.trim()||null,category:$('spCategory').value,message:$('spMessage').value.trim()};
+  if(row.message.length<5){toast('Please write a little more.');return;}
+  if(!user&&!row.email){toast('Please add your email so we can reply.');return;}
+  const {error}=await supabaseClient.from('support_requests').insert(row);
+  if(error){toast('Could not send: '+error.message);return;}
+  e.target.reset();toast('Message sent. Thank you.');loadMySupport();
+});
+/* ---------- Announcements ---------- */
+async function loadNotifications(){
+  try{const {data,error}=await supabaseClient.from('notifications').select('*').order('created_at',{ascending:false}).limit(30);if(error)throw error;notifications=data||[];}catch(e){notifications=[];}
+  updateBell();
+}
+function notifSeen(){try{return Number(localStorage.getItem('notifSeen')||0);}catch(e){return 0;}}
+function updateBell(){const b=$('bellCount');if(!b)return;const n=notifications.filter(x=>new Date(x.created_at).getTime()>notifSeen()).length;b.textContent=n?String(n):'';}
+function notifItemHtml(n){
+  const t=tournaments.find(x=>x.id===n.tournament_id),mine=currentUser&&(n.created_by===currentUser.id||isAdmin());
+  return `<div class="tourrow"><div><strong>${escapeHtml(n.title)}</strong><small>${escapeHtml(n.body||'')}</small><small>${t?escapeHtml(t.name)+' · ':''}${new Date(n.created_at).toLocaleString()}</small></div>${mine?`<button class="smallbtn danger" onclick="deleteAnnouncement('${n.id}')">Delete</button>`:''}</div>`;
+}
+function announcementsHtml(){
+  const list=notifications.filter(n=>n.kind==='announcement').slice(0,3);if(!list.length)return '';
+  return `<div class="card" style="margin-bottom:14px"><div class="cardhead"><h2>📢 Announcements</h2></div><div class="cardbody tournamentlist">${list.map(notifItemHtml).join('')}</div></div>`;
+}
+function openNotifications(){
+  const canPost=currentUser&&tournaments.length;
+  const compose=canPost?`<form id="annForm" style="margin-bottom:14px"><div class="field"><label>Post an announcement</label><select id="annTournament">${tournaments.map(t=>`<option value="${t.id}">${escapeHtml(t.name)}</option>`).join('')}</select></div><div class="field"><input id="annTitle" maxlength="120" placeholder="Title" required></div><div class="field"><textarea id="annBody" rows="3" maxlength="1000" placeholder="Message"></textarea></div><button class="primary" type="submit">Post</button></form>`:'';
+  $('notifBody').innerHTML=compose+(notifications.length?`<div class="tournamentlist">${notifications.map(notifItemHtml).join('')}</div>`:'<div class="empty">No announcements yet.</div>');
+  const f=$('annForm');if(f)f.addEventListener('submit',postAnnouncement);
+  $('notifBg').classList.add('show');
+  try{localStorage.setItem('notifSeen',String(Date.now()));}catch(e){}
+  updateBell();
+}
+async function postAnnouncement(e){
+  e.preventDefault();if(!requireOrganizer())return;
+  const row={tournament_id:$('annTournament').value,title:$('annTitle').value.trim(),body:$('annBody').value.trim()||null,kind:'announcement',created_by:currentUser.id};
+  const {error}=await supabaseClient.from('notifications').insert(row);
+  if(error){toast('Could not post: '+error.message);return;}
+  logAudit('announcement posted','tournament:'+row.tournament_id,{title:row.title});
+  await loadNotifications();openNotifications();toast('Announcement posted.');
+}
+async function deleteAnnouncement(id){
+  if(!confirm('Delete this announcement?'))return;
+  const {error}=await supabaseClient.from('notifications').delete().eq('id',id);
+  if(error){toast('Could not delete: '+error.message);return;}
+  await loadNotifications();openNotifications();renderLive();
+}
+/* ---------- Administrator panel ---------- */
+async function loadAdmin(){
+  const box=$('adminBox');if(!box)return;
+  if(!isAdmin()){box.innerHTML='<div class="card"><div class="cardbody"><div class="empty">Administrators only.</div></div></div>';return;}
+  const [acc,sup,log]=await Promise.all([supabaseClient.rpc('admin_list_accounts'),supabaseClient.from('support_requests').select('*').order('created_at',{ascending:false}).limit(50),supabaseClient.from('audit_log').select('*').order('created_at',{ascending:false}).limit(20)]);
+  const accounts=acc.data||[],reqs=sup.data||[],logs=log.data||[],m=appSettings.maintenance||{};
+  const open=reqs.filter(r=>r.status!=='resolved').length;
+  box.innerHTML=`<div class="stats" style="margin-bottom:14px"><div class="card"><div class="cardbody"><small>ACCOUNTS</small><h2>${accounts.length}</h2></div></div><div class="card"><div class="cardbody"><small>TOURNAMENTS</small><h2>${tournaments.length}</h2></div></div><div class="card"><div class="cardbody"><small>OPEN SUPPORT REQUESTS</small><h2>${open}</h2></div></div></div>
+  <div class="card" style="margin-bottom:14px"><div class="cardhead"><h2>Maintenance mode</h2></div><div class="cardbody"><label class="checkrow"><input type="checkbox" id="mtOn" ${m.enabled?'checked':''}> Turn maintenance mode on (visitors see a maintenance page; administrators can still sign in)</label><div class="field"><label>Message for visitors</label><textarea id="mtMsg" rows="2" maxlength="300">${escapeHtml(m.message||'')}</textarea></div><button class="primary" onclick="saveMaintenance()">Save</button><p class="muted-note">This hides the pages from ordinary visitors. It is not a security lock, and your data stays stored safely.</p></div></div>
+  <div class="card" style="margin-bottom:14px"><div class="cardhead"><h2>Accounts</h2></div><div class="cardbody" style="overflow-x:auto"><table class="group-table"><thead><tr><th>Email</th><th>Username</th><th>Role</th><th>Status</th><th></th></tr></thead><tbody>${accounts.map(a=>`<tr><td>${escapeHtml(a.email)}</td><td>${escapeHtml(a.username||'-')}</td><td><select onchange="adminRole('${a.id}',this.value)">${['player','organizer','admin'].map(r=>`<option ${a.role===r?'selected':''}>${r}</option>`).join('')}</select></td><td>${a.suspended?'Suspended':'Active'}</td><td><button class="smallbtn ${a.suspended?'':'danger'}" onclick="adminSuspend('${a.id}',${!a.suspended})">${a.suspended?'Restore':'Suspend'}</button></td></tr>`).join('')}</tbody></table></div></div>
+  <div class="card" style="margin-bottom:14px"><div class="cardhead"><h2>Support requests</h2></div><div class="cardbody tournamentlist">${reqs.length?reqs.map(r=>`<div class="tourrow" style="display:block"><strong>${escapeHtml(r.category)} · ${escapeHtml(r.name||'')} ${escapeHtml(r.email||'')}</strong><small>${escapeHtml(r.message)}</small><div class="pfgrid" style="margin-top:8px"><select id="srS_${r.id}">${['open','in_progress','resolved'].map(x=>`<option ${r.status===x?'selected':''}>${x}</option>`).join('')}</select><input id="srR_${r.id}" placeholder="Reply" value="${escapeHtml(r.admin_reply||'')}"></div><button class="smallbtn" style="margin-top:6px" onclick="adminSaveSupport('${r.id}')">Save</button></div>`).join(''):'<div class="empty">No requests.</div>'}</div></div>
+  <div class="card"><div class="cardhead"><h2>Recent activity (audit log)</h2></div><div class="cardbody tournamentlist">${logs.length?logs.map(l=>`<div class="tourrow"><div><strong>${escapeHtml(l.action)}</strong><small>${escapeHtml(l.target||'')} · ${new Date(l.created_at).toLocaleString()}</small></div></div>`).join(''):'<div class="empty">No activity yet.</div>'}</div></div>`;
+}
+async function saveMaintenance(){
+  if(!isAdmin())return;
+  const value={enabled:$('mtOn').checked,message:$('mtMsg').value.trim()};
+  const {error}=await supabaseClient.from('app_settings').upsert({key:'maintenance',value,updated_at:new Date().toISOString()});
+  if(error){toast('Could not save: '+error.message);return;}
+  appSettings.maintenance=value;applyMaintenance();logAudit('maintenance '+(value.enabled?'on':'off'),'settings',{});toast('Maintenance settings saved.');
+}
+async function adminRole(id,role){
+  if(!isAdmin()||!confirm('Change this account to '+role+'?')){loadAdmin();return;}
+  const {error}=await supabaseClient.rpc('admin_set_role',{p_target:id,p_role:role});
+  if(error)toast('Could not change role: '+error.message);else toast('Role changed.');loadAdmin();
+}
+async function adminSuspend(id,flag){
+  if(!isAdmin())return;
+  const reason=flag?prompt('Reason for suspending this account?'):'';
+  if(flag&&reason===null)return;
+  const {error}=await supabaseClient.rpc('admin_set_suspended',{p_target:id,p_suspended:flag,p_reason:reason||null});
+  if(error)toast('Could not update: '+error.message);else toast(flag?'Account suspended.':'Account restored.');loadAdmin();
+}
+async function adminSaveSupport(id){
+  const {error}=await supabaseClient.from('support_requests').update({status:$('srS_'+id).value,admin_reply:$('srR_'+id).value.trim()||null,updated_at:new Date().toISOString()}).eq('id',id);
+  if(error)toast('Could not save: '+error.message);else toast('Saved.');loadAdmin();
+}
+
+
+/* ---------- CAPTCHA (Cloudflare Turnstile). Leave the key empty to keep it switched off. ---------- */
+const TURNSTILE_SITE_KEY='';
+const turnstileIds={},captchaTokens={};
+function showCaptcha(boxId){
+  if(!TURNSTILE_SITE_KEY)return;
+  if(!window.turnstile&&!document.getElementById('tsScript')){const sc=document.createElement('script');sc.id='tsScript';sc.src='https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit';sc.async=true;document.head.appendChild(sc);}
+  const go=()=>{
+    if(!window.turnstile){setTimeout(go,300);return;}
+    if(turnstileIds[boxId]!==undefined){captchaTokens[boxId]='';window.turnstile.reset(turnstileIds[boxId]);return;}
+    turnstileIds[boxId]=window.turnstile.render($(boxId),{sitekey:TURNSTILE_SITE_KEY,theme:'dark',callback:t=>{captchaTokens[boxId]=t;},'expired-callback':()=>{captchaTokens[boxId]='';}});
+  };go();
+}
+function captchaOpts(boxId){return TURNSTILE_SITE_KEY?{captchaToken:captchaTokens[boxId]||''}:{};}
+function captchaReady(boxId){if(!TURNSTILE_SITE_KEY||captchaTokens[boxId])return true;toast('Please complete the security check first.');return false;}
+function captchaReset(boxId){if(TURNSTILE_SITE_KEY&&window.turnstile&&turnstileIds[boxId]!==undefined){captchaTokens[boxId]='';window.turnstile.reset(turnstileIds[boxId]);}}
+/* ---------- Two-step sign-in (MFA) ---------- */
+let mfaPromise=null,mfaResolve=null;
+function askMfaCode(){
+  if(mfaPromise)return mfaPromise;
+  mfaPromise=new Promise(resolve=>{
+    $('mfaCode').value='';$('mfaBg').classList.add('show');setTimeout(()=>$('mfaCode').focus(),50);
+    mfaResolve=ok=>{$('mfaBg').classList.remove('show');mfaPromise=null;resolve(ok);};
+  });
+  return mfaPromise;
+}
+async function submitMfa(){
+  const code=$('mfaCode').value.trim();
+  if(!/^\d{6}$/.test(code)){toast('Enter the 6-digit code from your authenticator app.');return;}
+  const {data:fs,error:fe}=await supabaseClient.auth.mfa.listFactors();
+  const f=((fs&&fs.totp)||[]).find(x=>x.status==='verified');
+  if(fe||!f){toast('No authenticator was found for this account.');return;}
+  const {error}=await supabaseClient.auth.mfa.challengeAndVerify({factorId:f.id,code});
+  if(error){toast('That code was not accepted. '+error.message);$('mfaCode').value='';return;}
+  if(mfaResolve)mfaResolve(true);
+}
+function cancelMfa(){if(mfaResolve)mfaResolve(false);}
+async function mfaGate(){
+  try{
+    const {data}=await supabaseClient.auth.mfa.getAuthenticatorAssuranceLevel();
+    if(data&&data.nextLevel==='aal2'&&data.currentLevel!=='aal2')return await askMfaCode();
+  }catch(e){console.warn('MFA check:',e);}
+  return true;
+}
+async function renderMfaBox(){
+  const box=$('mfaBox');if(!box)return;
+  if(!(currentUser||playerUser)){box.innerHTML='';return;}
+  let on=null;
+  try{const {data}=await supabaseClient.auth.mfa.listFactors();on=((data&&data.totp)||[]).find(f=>f.status==='verified')||null;}catch(e){box.innerHTML='';return;}
+  box.innerHTML=`<div class="card"><div class="cardhead"><h2>Two-step sign-in</h2><span>${on?'ON':'OFF'}</span></div><div class="cardbody" id="mfaBody">${on?`<p class="muted-note">Each time you sign in, your account asks for a 6-digit code from your authenticator app.</p><button class="smallbtn danger" onclick="disableMfa('${on.id}')">Turn off</button>`:`<p class="muted-note">Add a second lock to your account. You need an authenticator app, such as Google Authenticator, Microsoft Authenticator or Authy.</p><button class="primary" onclick="startMfa()">Turn on</button>`}</div></div>`;
+}
+async function startMfa(){
+  const {data:fs}=await supabaseClient.auth.mfa.listFactors();
+  for(const f of ((fs&&fs.all)||[]))if(f.status==='unverified')await supabaseClient.auth.mfa.unenroll({factorId:f.id});
+  const {data,error}=await supabaseClient.auth.mfa.enroll({factorType:'totp',friendlyName:'Tournament Hub '+Date.now()});
+  if(error){toast('Could not start: '+error.message);return;}
+  $('mfaBody').innerHTML=`<p>1. Open your authenticator app and scan this picture:</p><img src="${data.totp.qr_code}" alt="QR code" style="width:200px;height:200px;background:#fff;padding:8px;border-radius:8px"><p class="muted-note">Cannot scan it? In the app, choose to enter a key and type: <strong>${escapeHtml(data.totp.secret)}</strong></p><p>2. Enter the 6-digit code the app shows:</p><div class="field"><input id="mfaEnrollCode" inputmode="numeric" maxlength="6" placeholder="123456"></div><button class="primary" onclick="finishMfa('${data.id}')">Confirm</button> <button class="secondary" onclick="cancelEnroll('${data.id}')">Cancel</button>`;
+}
+async function cancelEnroll(id){await supabaseClient.auth.mfa.unenroll({factorId:id});renderMfaBox();}
+async function finishMfa(factorId){
+  const code=$('mfaEnrollCode').value.trim();
+  if(!/^\d{6}$/.test(code)){toast('Enter the 6-digit code from your authenticator app.');return;}
+  const {error}=await supabaseClient.auth.mfa.challengeAndVerify({factorId,code});
+  if(error){toast('That code was not accepted. '+error.message);return;}
+  toast('Two-step sign-in is now ON.');renderMfaBox();
+}
+async function disableMfa(id){
+  if(!confirm('Turn off two-step sign-in? Your account will be less safe.'))return;
+  const {error}=await supabaseClient.auth.mfa.unenroll({factorId:id});
+  if(error){toast('Could not turn it off: '+error.message);return;}
+  toast('Two-step sign-in is OFF.');renderMfaBox();
+}
+
+function showView(id){
+  if((id==='settings'||id==='registrations')&&!currentUser)id='dashboard';document.querySelectorAll('.nav button').forEach(b=>b.classList.toggle('active',b.dataset.view===id));document.querySelectorAll('.section').forEach(s=>s.classList.toggle('active',s.id===id));if(id==='profile'){profileDirty=false;renderProfileForm();}if(id==='community')loadDirectory();if(id==='admin')loadAdmin();if(id==='profile')renderMfaBox();if(id==='help')loadMySupport();}
+document.querySelectorAll('.nav button').forEach(b=>b.addEventListener('click',()=>showView(b.dataset.view)));
+function openCreate(){if(!requireOrganizer())return;editTournamentId=null;$('createTitle').textContent='Create tournament';$('saveTournamentBtn').textContent='Create tournament';$('createForm').reset();$('createBg').classList.add('show');}
+function closeCreate(){$('createBg').classList.remove('show');editTournamentId=null;}
+function openEdit(id){
+  if(!requireOrganizer())return;
+  const t=tournaments.find(x=>x.id===id);if(!t)return;
+  editTournamentId=id;$('createTitle').textContent='Edit tournament';$('saveTournamentBtn').textContent='Save changes';
+  $('tName').value=t.name;$('tGame').value=t.game;$('tFormat').value=t.format;$('tSlots').value=String(t.slots);
+  $('createBg').classList.add('show');
+}
+async function deleteTournament(id){
+  if(!requireOrganizer())return;
+  const t=tournaments.find(x=>x.id===id);if(!t||!confirm('Delete \"'+t.name+'\"? Its registrations and matches will also be removed.'))return;
+  try{
+    let result=await supabaseClient.from('registrations').delete().eq('tournament_id',id);if(result.error)throw result.error;
+    result=await supabaseClient.from('matches').delete().eq('tournament_id',id);if(result.error)throw result.error;
+    result=await supabaseClient.from('tournaments').delete().eq('id',id);if(result.error)throw result.error;
+    await loadData();toast('Tournament deleted from Supabase.');
+  }catch(e){
+    console.error('Tournament deletion failed:',e);
+    const msg=e?.message||String(e);
+    if(/row.level security|row-level security|permission denied|not authorized|42501/i.test(msg)) toast('Delete blocked by Supabase permissions. Organizer DELETE policies are missing or do not match your account.');
+    else toast('Delete failed: '+msg);
+  }
+}
+function openMatch(id){
+  if(!requireOrganizer())return;
+  if(!tournaments.length){toast('Create a tournament first.');return;}
+  editMatchId=id||null;const m=matches.find(x=>x.id===id);
+  populateSelect();$('matchTitle').textContent=m?'Edit match':'Add match';
+  $('mHome').value=m?.home||'';$('mAway').value=m?.away||'';$('mHomeScore').value=m?.homeScore??0;$('mAwayScore').value=m?.awayScore??0;$('mStatus').value=m?.status||'Upcoming';
+  $('mHomePen').value=m?.homePenalties??'';$('mAwayPen').value=m?.awayPenalties??'';
+  walkoverNote=m?.resultNote||null;
+  if(m)$('mTournament').value=m.tournamentId;$('matchBg').classList.add('show');
+}
+function closeMatch(){$('matchBg').classList.remove('show');}
+async function deleteMatch(id){
+  if(!requireOrganizer())return;if(!confirm('Delete this match?'))return;
+  const {error}=await supabaseClient.from('matches').delete().eq('id',id);
+  if(error){toast('Could not delete match: '+error.message);return;}
+  logAudit('match deleted','match:'+id,{});
+  await loadData();toast('Match deleted.');
+}
+$('matchForm').addEventListener('submit',async e=>{
+  e.preventDefault();if(!requireOrganizer())return;
+  const data={tournament_id:$('mTournament').value,home_player:$('mHome').value.trim(),away_player:$('mAway').value.trim(),home_score:Number($('mHomeScore').value),away_score:Number($('mAwayScore').value),match_status:$('mStatus').value};
+  const pen=id=>$(id).value===''?null:Number($(id).value),hp=pen('mHomePen'),ap=pen('mAwayPen');
+  if((hp===null)!==(ap===null)){toast('Fill in both penalty scores, or leave both empty.');return;}
+  const oldM=matches.find(x=>x.id===editMatchId);
+  if(hp!==null||(oldM&&(oldM.homePenalties!==null||oldM.awayPenalties!==null))){data.home_penalties=hp;data.away_penalties=ap;}
+  if(walkoverNote||(oldM&&oldM.resultNote)){data.result_note=walkoverNote;}
+  try{
+    const result=editMatchId?await supabaseClient.from('matches').update(data).eq('id',editMatchId):await supabaseClient.from('matches').insert(data);
+    if(result.error)throw result.error;
+    logAudit(editMatchId?'match updated':'match created','match:'+(editMatchId||data.tournament_id),{home:data.home_player,away:data.away_player,score:data.home_score+'-'+data.away_score,status:data.match_status,walkover:walkoverNote});
+    await loadData();closeMatch();toast('Match saved to Supabase.');
+  }catch(err){toast('Could not save match: '+err.message);}
+});
+$('createForm').addEventListener('submit',async e=>{
+  e.preventDefault();if(!requireOrganizer())return;
+  const data={name:$('tName').value.trim(),game:$('tGame').value,format:$('tFormat').value,slots:Number($('tSlots').value),entry_fee:0,is_published:true,registration_open:true};
+  const wasEditing=Boolean(editTournamentId);
+  try{
+    const result=wasEditing
+      ?await supabaseClient.from('tournaments').update(data).eq('id',editTournamentId)
+      :await supabaseClient.from('tournaments').insert({...data,organizer_id:currentUser.id});
+    if(result.error)throw result.error;
+    await loadData();closeCreate();e.target.reset();toast(wasEditing?'Tournament updated.':'Tournament created.');
+    editTournamentId=null;
+  }catch(err){toast('Could not save tournament: '+err.message);}
+});
+function openReg(id){if(!tournaments.length){toast('No tournaments available.');return;}populateSelect();if(id)$('regTournament').value=id;$('regBg').classList.add('show');}
+function closeReg(){$('regBg').classList.remove('show');}
+$('regForm').addEventListener('submit',e=>{e.preventDefault();toast('Use the public player link to submit a real registration.');});
+function copyRegistrationLink(id){
+  const t=tournaments.find(x=>x.id===id);if(!t)return;
+  if(location.protocol==='file:'){toast('Upload this HTML page to a web host before sharing registration links.');return;}
+  const u=new URL(location.href);u.search='';u.hash='';u.searchParams.set('register',t.id);
+  const value=u.toString();
+  if(navigator.clipboard?.writeText)navigator.clipboard.writeText(value).then(()=>toast('Tournament registration link copied.')).catch(()=>fallbackCopy(value));
+  else fallbackCopy(value);
+}
+function fallbackCopy(v){const x=document.createElement('textarea');x.value=v;document.body.appendChild(x);x.select();try{document.execCommand('copy');toast('Tournament registration link copied.');}catch{prompt('Copy this registration link:',v);}x.remove();}
+function openAuth(){if(currentUser){signOut();return;}$('authBg').classList.add('show');showCaptcha('orgCaptcha');}
+function closeAuth(){$('authBg').classList.remove('show');}
+async function signOut(){
+  const {error}=await supabaseClient.auth.signOut();if(error){toast(error.message);return;}
+  currentUser=null;playerUser=null;myProfile=null;profileDirty=false;registrations=[];updateAuthUI();renderProfileForm();await loadData();toast('Signed out.');
+}
+$('authForm').addEventListener('submit',async e=>{
+  e.preventDefault();$('authSubmit').disabled=true;
+  try{
+    if(!captchaReady('orgCaptcha'))return;
+    const {data,error}=await supabaseClient.auth.signInWithPassword({email:$('authEmail').value.trim(),password:$('authPassword').value,options:captchaOpts('orgCaptcha')});
+    captchaReset('orgCaptcha');
+    if(error)throw error;
+    await applySession(data.user);closeAuth();$('authForm').reset();await loadData();toast(currentUser?'Organizer signed in.':'Signed in as a player. Organizer tools are not available for this account.');
+  }catch(err){toast('Sign-in failed: '+err.message);}
+  finally{$('authSubmit').disabled=false;}
+});
+async function saveApiUrl(){
+  const v=$('apiUrl').value.trim();
+  if(!/^https:\/\/script\.google\.com\/macros\/s\/.+\/exec(?:\?.*)?$/.test(v)){toast('Paste a valid Google Apps Script Web App URL.');return;}
+  apiUrl=v;localStorage.setItem(STORAGE_API,apiUrl);$('apiStatus').textContent='Google Sheets URL saved separately from Supabase.';toast('Google Sheets connection saved.');
+}
+async function testApiConnection(){if(!apiUrl){toast('Paste and save your Web App URL first.');return;}try{const data=await jsonp(apiUrl+'?action=ping');if(!data||!data.ok)throw new Error(data?.error||'Connection failed.');$('apiStatus').textContent='Google Sheet is reachable.';toast('Google Sheets connection successful.');}catch(err){$('apiStatus').textContent=err.message;toast(err.message);}}
+function jsonp(url){return new Promise((resolve,reject)=>{const cb='thcb_'+Date.now()+'_'+Math.floor(Math.random()*100000);const timer=setTimeout(()=>{cleanup();reject(new Error('Request timed out.'))},15000);function cleanup(){clearTimeout(timer);delete window[cb];script.remove();}window[cb]=(data)=>{cleanup();resolve(data);};const script=document.createElement('script');script.src=url+(url.includes('?')?'&':'?')+'callback='+cb;script.onerror=()=>{cleanup();reject(new Error('Could not reach Google Sheets.'));};document.head.appendChild(script);});}
+async function loadSharedRegistrations(){
+  if(!apiUrl){toast('Google Sheets is not configured. Supabase registrations load automatically after organizer sign-in.');return;}
+  try{const data=await jsonp(apiUrl+'?action=list');if(!data||!data.ok)throw new Error(data?.error||'Could not load registrations.');toast('Google Sheets entries fetched separately; Supabase remains the primary registration list.');}
+  catch(err){toast(err.message);}
+}
+async function initPublicRegistration(){
+  const params=new URLSearchParams(location.search),publicId=params.get('register');if(!publicId)return;
+  document.querySelector('.layout').style.display='none';document.querySelectorAll('.modalbg').forEach(x=>x.style.display='none');$('publicRegister').style.display='block';
+  try{
+    const {data:t,error}=await supabaseClient.from('tournaments').select('id,name,game,slots,is_published,registration_open').eq('id',publicId).maybeSingle();
+    if(error)throw error;if(!t||!t.is_published)throw new Error('This tournament is not available.');
+    $('publicTournamentName').textContent=t.name;$('publicTournamentMeta').textContent=t.game+' · Limited to '+t.slots+' players';
+    if(!t.registration_open){$('publicRegForm').style.display='none';$('publicMessage').style.display='block';$('publicMessage').textContent='Registration is currently closed.';return;}
+    $('publicRegForm').addEventListener('submit',async e=>{
+      e.preventDefault();const btn=e.submitter;btn.disabled=true;btn.textContent='Submitting…';
+      try{
+        const {data,error}=await supabaseClient.rpc('register_tournament_player',{
+          p_tournament_id:publicId,p_player_name:$('publicName').value.trim(),p_gamer_tag:$('publicTag').value.trim(),p_contact_number:$('publicPhone').value.trim()||null
+        });
+        if(error)throw error;
+        $('publicMessage').style.display='block';$('publicMessage').style.background='';$('publicMessage').style.borderColor='';$('publicMessage').style.color='';
+        $('publicMessage').textContent=data||'Registration successful! Your entry has been received.';
+        $('publicRegForm').reset();btn.textContent='Registration submitted';
+      }catch(err){
+        $('publicMessage').style.display='block';$('publicMessage').style.background='#30271a';$('publicMessage').style.borderColor='#70522d';$('publicMessage').style.color='#ffe2ad';$('publicMessage').textContent=err.message;
+        btn.disabled=false;btn.textContent='Submit registration';
+      }
+    });
+  }catch(err){
+    $('publicTournamentName').textContent='Registration unavailable';$('publicTournamentMeta').textContent='';
+    $('publicRegForm').style.display='none';$('publicMessage').style.display='block';$('publicMessage').textContent=err.message;
+  }
+}
+$('createBg').addEventListener('click',e=>{if(e.target===$('createBg'))closeCreate();});
+$('regBg').addEventListener('click',e=>{if(e.target===$('regBg'))closeReg();});
+$('matchBg').addEventListener('click',e=>{if(e.target===$('matchBg'))closeMatch();});
+$('authBg').addEventListener('click',e=>{if(e.target===$('authBg'))closeAuth();});
+if($('apiUrl'))$('apiUrl').value=apiUrl;
+async function init(){
+  initFanPage();
+  await initPublicRegistration();
+  const {data:{session}}=await supabaseClient.auth.getSession();
+  await applySession(session?.user||null);
+  supabaseClient.auth.onAuthStateChange((_event,session)=>{setTimeout(async()=>{await applySession(session?.user||null);loadData().catch(e=>toast('Supabase error: '+e.message));},0);});
+  try{await loadData();}catch(err){$('connectionPill').textContent='● SUPABASE ERROR';toast('Could not load Supabase data: '+err.message);}
+}
+init();
+</script></body></html>
